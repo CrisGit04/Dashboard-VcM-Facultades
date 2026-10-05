@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard VcM — Facultad Ciencias de la Rehabilitación y Calidad de Vida USS 2022-2025</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#f5f5f3;--bg3:#eeede9;
+  --tx:#1a1a1a;--tx2:#5a5a55;--tx3:#8a8a82;
+  --bdr:rgba(0,0,0,.11);
+  --ok-bg:#eaf3de;--ok-tx:#3B6D11;--ok-bd:#c0dd97;
+  --wn-bg:#faeeda;--wn-tx:#854F0B;--wn-bd:#fac775;
+  --in-bg:#e6f1fb;--in-tx:#185FA5;--in-bd:#b5d4f4;
+  --s1:#1B4F91;--s2:#155a3d;--s3:#6d3a00;--s4:#7a1e30;--s5:#3b2270;
+  --rm:8px;--rl:12px;--nav:255px;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif
+}
+body{font-family:var(--font);background:#e8e7e2;color:var(--tx);font-size:14px;line-height:1.6;display:flex;min-height:100vh}
+#sidebar{width:var(--nav);flex-shrink:0;background:#1a1a2e;color:#ccc;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;display:flex;flex-direction:column}
+#sidebar .logo{padding:1.1rem 1rem .9rem;border-bottom:1px solid rgba(255,255,255,.08)}
+#sidebar .logo h2{font-size:13px;font-weight:700;color:#fff;line-height:1.4}
+#sidebar .logo p{font-size:10px;color:rgba(255,255,255,.4);margin-top:3px}
+.nav-strategy{margin:3px 0}
+.nav-str-btn{width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:8px 12px 8px 10px;display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;color:#ccc;transition:background .15s}
+.nav-str-btn:hover{background:rgba(255,255,255,.06)}
+.snum{width:19px;height:19px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;color:#fff}
+.schev{margin-left:auto;font-size:9px;transition:transform .2s;color:rgba(255,255,255,.35)}
+.nav-str-btn.open .schev{transform:rotate(90deg)}
+.nav-dims{display:none;padding:2px 0 4px 38px;border-left:2px solid rgba(255,255,255,.06);margin-left:18px}
+.nav-dims.open{display:block}
+.nav-dim-btn{display:block;width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:5px 8px;font-size:10.5px;color:rgba(255,255,255,.48);transition:color .15s,background .15s;border-radius:4px}
+.nav-dim-btn:hover,.nav-dim-btn.active{color:#fff;background:rgba(255,255,255,.07)}
+.nav-dim-btn.active{font-weight:600}
+#main{margin-left:var(--nav);flex:1;min-width:0}
+.topbar{background:#1B4F91;color:#fff;padding:1.1rem 2rem;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:50}
+.topbar h1{font-size:18px;font-weight:700}
+.topbar .sub{font-size:11px;opacity:.75;margin-top:2px}
+.topbar-badge{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:11px;font-weight:600;padding:4px 10px;border-radius:var(--rm);white-space:nowrap;align-self:flex-start}
+.content{padding:1.5rem 2rem 4rem;max-width:1050px}
+.str-section{margin-bottom:2.5rem;scroll-margin-top:72px}
+.str-header{display:flex;align-items:center;gap:10px;margin-bottom:1.2rem;padding-bottom:9px;border-bottom:3px solid}
+.str-num-badge{width:27px;height:27px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0}
+.str-title-block h2{font-size:15px;font-weight:700}
+.str-title-block p{font-size:11px;opacity:.65;margin-top:1px}
+.s1 .str-header{border-color:var(--s1)}.s1 .str-num-badge{background:var(--s1)}.s1 .str-title-block h2{color:var(--s1)}
+.s2 .str-header{border-color:var(--s2)}.s2 .str-num-badge{background:var(--s2)}.s2 .str-title-block h2{color:var(--s2)}
+.s3 .str-header{border-color:var(--s3)}.s3 .str-num-badge{background:var(--s3)}.s3 .str-title-block h2{color:var(--s3)}
+.s4 .str-header{border-color:var(--s4)}.s4 .str-num-badge{background:var(--s4)}.s4 .str-title-block h2{color:var(--s4)}
+.s5 .str-header{border-color:var(--s5)}.s5 .str-num-badge{background:var(--s5)}.s5 .str-title-block h2{color:var(--s5)}
+.dim-section{margin-bottom:1.4rem;scroll-margin-top:72px}
+.dim-label{font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:9px;padding:5px 10px;background:var(--bg2);border-radius:var(--rm);display:inline-block}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:13px;min-width:0}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:13px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:13px}
+.card{background:var(--bg);border:.5px solid var(--bdr);border-radius:var(--rl);padding:.9rem 1.1rem;overflow:hidden;min-width:0}
+.card h3{font-size:12.5px;font-weight:600;margin-bottom:11px}
+.card-full{background:var(--bg);border:.5px solid var(--bdr);border-radius:var(--rl);padding:.9rem 1.1rem;margin-bottom:13px;overflow:hidden;min-width:0}
+.card-full h3{font-size:12.5px;font-weight:600;margin-bottom:11px}
+.kpi{background:var(--bg);border:.5px solid var(--bdr);border-radius:var(--rl);padding:16px 14px 14px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:130px}
+.kpi-lbl{font-size:11px;font-weight:500;color:var(--tx2);margin-bottom:8px;text-align:center;line-height:1.3}
+.kpi-val{font-size:32px;font-weight:700;line-height:1;text-align:center;color:var(--tx)}
+.kpi-note{font-size:11px;margin-top:4px;text-align:center;line-height:1.4}
+.up{color:#3B6D11}.dn{color:#A32D2D}
+.chart-canvas{display:block;width:100%!important}
+.lgd{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;font-size:11px;color:var(--tx2)}
+.lgd span{display:flex;align-items:center;gap:4px}
+.ldot{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+.sv-q{font-size:12px;font-weight:600;color:var(--tx);margin:13px 0 7px;padding-top:11px;border-top:.5px solid var(--bdr)}
+.sv-note{font-size:10px;color:var(--tx3);margin-bottom:7px;margin-top:-4px}
+.sv-row{display:flex;align-items:center;gap:7px;margin-bottom:6px;font-size:11.5px}
+.sv-lbl{flex-shrink:0;color:var(--tx2);width:205px}
+.sv-lbl.w155{width:155px}.sv-lbl.w175{width:175px}
+.sv-bg{flex:1;background:var(--bg3);border-radius:4px;height:7px;overflow:hidden}
+.sv-fill{height:100%;border-radius:4px}
+.sv-val{width:38px;text-align:right;font-weight:700;flex-shrink:0;font-size:11.5px}
+.sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:13px}
+.sig{border-radius:var(--rm);padding:11px 13px;border:.5px solid}
+.sig.ok{background:var(--ok-bg);border-color:var(--ok-bd)}
+.sig.wn{background:var(--wn-bg);border-color:var(--wn-bd)}
+.sig-t{font-size:11.5px;font-weight:700;margin-bottom:4px}
+.sig.ok .sig-t{color:var(--ok-tx)}.sig.wn .sig-t{color:var(--wn-tx)}
+.sig-b{font-size:11px;line-height:1.5}
+.sig.ok .sig-b{color:var(--ok-tx)}.sig.wn .sig-b{color:var(--wn-tx)}
+.tag{font-size:11px;padding:3px 9px;border-radius:var(--rm);background:var(--in-bg);color:var(--in-tx);border:.5px solid var(--in-bd)}
+.tag.g{background:var(--ok-bg);color:var(--ok-tx);border-color:var(--ok-bd)}
+.tag.a{background:var(--wn-bg);color:var(--wn-tx);border-color:var(--wn-bd)}
+hr{border:none;border-top:.5px solid var(--bdr);margin:1.4rem 0}
+.alert-box{padding:9px 13px;border-radius:var(--rm);border:.5px solid var(--wn-bd);background:var(--wn-bg);font-size:11.5px;color:var(--wn-tx);margin-top:7px}
+.info-box{padding:9px 13px;border-radius:var(--rm);border:.5px solid var(--ok-bd);background:var(--ok-bg);font-size:11.5px;color:var(--ok-tx);margin-top:7px}
+.ftr{margin-top:2rem;padding-top:1rem;border-top:.5px solid var(--bdr);font-size:11px;color:var(--tx3);text-align:center}
+</style>
+</head>
+<body>
+
+<nav id="sidebar">
+  <div class="logo"><h2>VcM Dashboard</h2><p>F. Ciencias Rehabilitaci&oacute;n y Calidad de Vida &middot; 2022&ndash;2025</p></div>
+  <div style="padding:6px 5px;flex:1">
+    <div class="nav-strategy">
+      <button class="nav-str-btn" onclick="toggleNav(this,'dims1')"><span class="snum" style="background:#1B4F91">1</span><span>V&iacute;nculo con el entorno</span><span class="schev">&#9658;</span></button>
+      <div class="nav-dims" id="dims1">
+        <button class="nav-dim-btn" onclick="goTo('d1_1',this)">Dim.1 Despliegue territorial</button>
+        <button class="nav-dim-btn" onclick="goTo('d1_2',this)">Dim.2 Sostenibilidad y reputaci&oacute;n</button>
+      </div>
+    </div>
+    <div class="nav-strategy">
+      <button class="nav-str-btn" onclick="toggleNav(this,'dims2')"><span class="snum" style="background:#155a3d">2</span><span>Integraci&oacute;n formativa</span><span class="schev">&#9658;</span></button>
+      <div class="nav-dims" id="dims2">
+        <button class="nav-dim-btn" onclick="goTo('d2_3',this)">Dim.3 Integraci&oacute;n curricular</button>
+        <button class="nav-dim-btn" onclick="goTo('d2_4',this)">Dim.4 Participaci&oacute;n estudiantil</button>
+        <button class="nav-dim-btn" onclick="goTo('d2_5',this)">Dim.5 Resultados formativos</button>
+      </div>
+    </div>
+    <div class="nav-strategy">
+      <button class="nav-str-btn" onclick="toggleNav(this,'dims3')"><span class="snum" style="background:#6d3a00">3</span><span>Desarrollo acad&eacute;mico</span><span class="schev">&#9658;</span></button>
+      <div class="nav-dims" id="dims3">
+        <button class="nav-dim-btn" onclick="goTo('d3_6',this)">Dim.6 Pr&aacute;ctica docente</button>
+        <button class="nav-dim-btn" onclick="goTo('d3_7',this)">Dim.7 Desarrollo profesional</button>
+      </div>
+    </div>
+    <div class="nav-strategy">
+      <button class="nav-str-btn" onclick="toggleNav(this,'dims4')"><span class="snum" style="background:#7a1e30">4</span><span>Contribuci&oacute;n territorial</span><span class="schev">&#9658;</span></button>
+      <div class="nav-dims" id="dims4">
+        <button class="nav-dim-btn" onclick="goTo('d4_8',this)">Dim.8 Pertinencia territorial</button>
+        <button class="nav-dim-btn" onclick="goTo('d4_9',this)">Dim.9 Valoraci&oacute;n territorial</button>
+      </div>
+    </div>
+    <div class="nav-strategy">
+      <button class="nav-str-btn" onclick="toggleNav(this,'dims5')"><span class="snum" style="background:#3b2270">5</span><span>Gesti&oacute;n institucional</span><span class="schev">&#9658;</span></button>
+      <div class="nav-dims" id="dims5">
+        <button class="nav-dim-btn" onclick="goTo('d5_10',this)">Dim.10 Capacidades</button>
+        <button class="nav-dim-btn" onclick="goTo('d5_11',this)">Dim.11 Gesti&oacute;n y desempe&ntilde;o</button>
+        <button class="nav-dim-btn" onclick="goTo('d5_12',this)">Dim.12 Recursos e inversi&oacute;n</button>
+      </div>
+    </div>
+    <div class="nav-strategy" style="margin-top:10px;border-top:1px solid rgba(255,255,255,.08);padding-top:6px">
+      <button class="nav-str-btn" onclick="goTo('sintesis',this)"><span class="snum" style="background:#4a4a4a">&#9654;</span><span>S&iacute;ntesis estrat&eacute;gica</span></button>
+    </div>
+  </div>
+</nav>
+
+<div id="main">
+<div class="topbar">
+  <div><h1>Despliegue VcM &mdash; Facultad de Ciencias de la Rehabilitaci&oacute;n y Calidad de Vida</h1><div class="sub">Periodo 2022&ndash;2025 &nbsp;&middot;&nbsp; Junio 2026</div></div>
+  <span class="topbar-badge">Uso interno direcci&oacute;n</span>
+</div>
+<div class="content">
+<!-- KPIs globales del periodo -->
+<div class="dim-label" style="margin-top:0">Indicadores clave &mdash; 2022 vs 2025</div>
+<div class="g4" style="margin-bottom:1.75rem">
+  <div class="kpi"><div class="kpi-lbl">Proyectos liderados 2025</div><div class="kpi-val">52</div><div style="font-size:12px;color:var(--tx3);margin-top:6px">vs <strong style="color:var(--tx2)">40</strong> en 2022</div><div class="kpi-note up" style="margin-top:5px">&#9650;&nbsp;+30% acumulado</div></div>
+  <div class="kpi"><div class="kpi-lbl">Asignaturas VcM activas 2025</div><div class="kpi-val">11</div><div style="font-size:12px;color:var(--tx3);margin-top:6px">Fono, Nutr. y Terapia Ocup.</div><div class="kpi-note up" style="margin-top:5px">&#9650;&nbsp;1.900 estudiantes aprobados</div></div>
+  <div class="kpi"><div class="kpi-lbl">Estudiantes participantes 2025</div><div class="kpi-val">2.660</div><div style="font-size:12px;color:var(--tx3);margin-top:6px">vs <strong style="color:var(--tx2)">1.998</strong> en 2022</div><div class="kpi-note up" style="margin-top:5px">&#9650;&nbsp;+3 pp cobertura vs 2024 (56%&rarr;59%)</div></div>
+  <div class="kpi"><div class="kpi-lbl">Cobertura pregrado diurno</div><div class="kpi-val">59%</div><div style="font-size:12px;color:var(--tx3);margin-top:6px">vs <strong style="color:var(--tx2)">49%</strong> en 2022</div><div class="kpi-note up" style="margin-top:5px">&#9650;&nbsp;+10 pp acumulado</div></div>
+  <div class="kpi"><div class="kpi-lbl">Proyectos con participaci&oacute;n 2025</div><div class="kpi-val">110</div><div style="font-size:12px;color:var(--tx3);margin-top:6px">Lidera: 52 &middot; Participa: 110</div><div class="kpi-note up" style="margin-top:5px">&#9650;&nbsp;vs 67 en 2022</div></div>
+  <div class="kpi"><div class="kpi-lbl">Comunas con presencia</div><div class="kpi-val">120</div><div style="font-size:12px;color:var(--tx3);margin-top:6px">4 sedes activas</div><div class="kpi-note up" style="margin-top:5px">&#9650;&nbsp;592 proyectos en 4 a&ntilde;os</div></div>
+  <div class="kpi"><div class="kpi-lbl">Satisfacci&oacute;n estudiantil</div><div class="kpi-val">94.1%</div><div style="font-size:12px;color:var(--tx3);margin-top:6px">impacto positivo/muy positivo</div><div class="kpi-note up" style="margin-top:5px">&#9650;&nbsp;99% recomendar&iacute;a VcM</div></div>
+  <div class="kpi"><div class="kpi-lbl">Org. externas recomiendan USS</div><div class="kpi-val">100%</div><div style="font-size:12px;color:var(--tx3);margin-top:6px">recomendar&iacute;a a otra organizaci&oacute;n</div><div class="kpi-note up" style="margin-top:5px">&#9650;&nbsp;90.9% quiere continuar proyectos</div></div>
+</div>
+
+<!-- S1 -->
+<div class="str-section s1" id="s1">
+  <div class="str-header"><div class="str-num-badge">1</div><div class="str-title-block"><h2>Estrategia 1 &mdash; V&iacute;nculo con el entorno relevante</h2><p>Despliegue territorial &middot; Sostenibilidad y reputaci&oacute;n</p></div></div>
+
+  <div class="dim-section" id="d1_1">
+    <div class="dim-label">Dimensi&oacute;n 1 &middot; Despliegue territorial &mdash; Proyectos colaborativos 2022&ndash;2025</div>
+    <div class="g2">
+      <div class="card">
+        <h3>Proyectos liderados y con participaci&oacute;n 2022&ndash;2025</h3>
+        <div class="lgd"><span><span class="ldot" style="background:#cdd9ee"></span>2022</span><span><span class="ldot" style="background:#8faed9"></span>2023</span><span><span class="ldot" style="background:#4b9ad4"></span>2024</span><span><span class="ldot" style="background:#1B4F91"></span>2025</span></div>
+        <canvas id="c1" class="chart-canvas" data-h="210"></canvas>
+      </div>
+      <div class="card">
+        <h3>Proyectos totales por sede 2022&ndash;2025</h3>
+        <div class="lgd"><span><span class="ldot" style="background:#cdd9ee"></span>2022</span><span><span class="ldot" style="background:#8faed9"></span>2023</span><span><span class="ldot" style="background:#4b9ad4"></span>2024</span><span><span class="ldot" style="background:#1B4F91"></span>2025</span></div>
+        <canvas id="c2" class="chart-canvas" data-h="210"></canvas>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <h3>Proyectos liderados por carrera 2022&ndash;2025</h3>
+        <div class="lgd"><span><span class="ldot" style="background:#cdd9ee"></span>2022</span><span><span class="ldot" style="background:#8faed9"></span>2023</span><span><span class="ldot" style="background:#4b9ad4"></span>2024</span><span><span class="ldot" style="background:#1B4F91"></span>2025</span></div>
+        <canvas id="c3" class="chart-canvas" data-h="200"></canvas>
+      </div>
+      <div class="card">
+        <h3>Proyectos con participaci&oacute;n por carrera 2022&ndash;2025</h3>
+        <div class="lgd"><span><span class="ldot" style="background:#cdd9ee"></span>2022</span><span><span class="ldot" style="background:#8faed9"></span>2023</span><span><span class="ldot" style="background:#4b9ad4"></span>2024</span><span><span class="ldot" style="background:#1B4F91"></span>2025</span></div>
+        <canvas id="c4" class="chart-canvas" data-h="200"></canvas>
+      </div>
+    </div>
+    <div class="card-full">
+      <h3>Proyectos colaborativos por PTH 2022&ndash;2025</h3>
+      <div class="lgd"><span><span class="ldot" style="background:#cdd9ee"></span>2022</span><span><span class="ldot" style="background:#8faed9"></span>2023</span><span><span class="ldot" style="background:#4b9ad4"></span>2024</span><span><span class="ldot" style="background:#1B4F91"></span>2025</span></div>
+      <canvas id="c_pth" class="chart-canvas" data-h="440"></canvas>
+    </div>
+    <div class="card-full">
+      <h3>Top 20 comunas con mayor presencia VcM (proyectos acumulados 2022&ndash;2025)</h3>
+      <div class="sv-note">120 comunas alcanzadas en total &middot; Top 20 concentra el 64% del total</div>
+      <canvas id="c5" class="chart-canvas" data-h="420"></canvas>
+      <div class="sig-grid" style="margin-top:12px">
+        <div class="sig ok"><div class="sig-t">&#9650; Liderazgo sur consolidado</div><div class="sig-b">Valdivia (82 proy.) y Concepci&oacute;n (70) concentran el 26% del total, consolidando las sedes con mayor tracci&oacute;n colaborativa de la facultad.</div></div>
+        <div class="sig wn"><div class="sig-t">&#9888; Alta dispersi&oacute;n territorial</div><div class="sig-b">El 34% de proyectos se distribuye en 101 comunas con baja frecuencia individual. La presencia en RM crece pero sin estrategia articulada: 4 comunas santiaguinas con 9&ndash;20 proyectos.</div></div>
+      </div>
+    </div>
+    <div class="card-full">
+      <h3>Top 10 carreras aliadas &mdash; proyectos acumulados 2022&ndash;2025</h3>
+      <div class="sv-note">81 carreras activas &middot; Top 10 concentra el 88% del total</div>
+      <canvas id="c6" class="chart-canvas" data-h="230"></canvas>
+    </div>
+    <div class="dim-label" style="margin-top:18px">Extensi&oacute;n acad&eacute;mica &mdash; Actividades complementarias al despliegue territorial</div>
+    <div class="g2">
+      <div class="card">
+        <h3>Extensi&oacute;n acad&eacute;mica por carrera 2022&ndash;2025</h3>
+        <div class="lgd"><span><span class="ldot" style="background:#cdd9ee"></span>2022</span><span><span class="ldot" style="background:#8faed9"></span>2023</span><span><span class="ldot" style="background:#4b9ad4"></span>2024</span><span><span class="ldot" style="background:#1B4F91"></span>2025</span></div>
+        <canvas id="c7" class="chart-canvas" data-h="200"></canvas>
+      </div>
+      <div class="card">
+        <h3>Extensi&oacute;n acad&eacute;mica por sede 2022&ndash;2025</h3>
+        <div class="lgd"><span><span class="ldot" style="background:#cdd9ee"></span>2022</span><span><span class="ldot" style="background:#8faed9"></span>2023</span><span><span class="ldot" style="background:#4b9ad4"></span>2024</span><span><span class="ldot" style="background:#1B4F91"></span>2025</span></div>
+        <canvas id="c8" class="chart-canvas" data-h="200"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="dim-section" id="d1_2">
+    <div class="dim-label">Dimensi&oacute;n 2 &middot; Sostenibilidad y reputaci&oacute;n &mdash; Percepciones 2025</div>
+    <div class="g4" style="margin-bottom:13px">
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Org. recomiendan USS</div><div class="kpi-val" style="color:#1B4F91">100%</div><div class="kpi-note up">&#9650;&nbsp;100% recomendar&iacute;a a otra org. (n=22)</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Cultura innovaci&oacute;n USS</div><div class="kpi-val" style="color:#1B4F91">84.7%</div><div class="kpi-note up">&#9650;&nbsp;de acuerdo/muy de acuerdo (n=124)</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Acad. fortalece reputaci&oacute;n</div><div class="kpi-val" style="color:#1B4F91">95.2%</div><div class="kpi-note up">&#9650;&nbsp;de acuerdo/muy de acuerdo (n=124)</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Org. quiere continuar</div><div class="kpi-val" style="color:#1B4F91">90.9%</div><div class="kpi-note up">&#9650;&nbsp;inter&eacute;s en nuevos proyectos (n=22)</div></div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <h3>Encuesta acad&eacute;micos 2025 &mdash; Contribuci&oacute;n a reputaci&oacute;n e innovaci&oacute;n (n=124)</h3>
+        <div class="sv-note">% de acuerdo + muy de acuerdo</div>
+        <div class="sv-q" style="margin-top:0;padding-top:0;border-top:none">Contribuyen a fortalecer la reputaci&oacute;n institucional</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:65%;background:#1B4F91"></div></div><span class="sv-val">~65%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:30.16%;background:#4b9ad4"></div></div><span class="sv-val">~30%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175" style="color:#8a8a82">Neutro + desacuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:4.84%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">4.8%</span></div>
+        <div class="sv-q">Contribuyen a cultura de innovaci&oacute;n USS</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:50%;background:#1B4F91"></div></div><span class="sv-val">~50%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:34.68%;background:#4b9ad4"></div></div><span class="sv-val">~35%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175" style="color:#8a8a82">Neutro + desacuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:15.32%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">15.3%</span></div>
+        <div class="sv-q">He potenciado mi contribuci&oacute;n profesional a la sociedad</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:60%;background:#1B4F91"></div></div><span class="sv-val">~60%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:32.62%;background:#4b9ad4"></div></div><span class="sv-val">~33%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175" style="color:#8a8a82">Neutro + desacuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:7.38%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">7.4%</span></div>
+        <div class="sv-q">He promovido y aplicado los valores USS</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:70%;background:#1B4F91"></div></div><span class="sv-val">~70%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:26.69%;background:#4b9ad4"></div></div><span class="sv-val">~27%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175" style="color:#8a8a82">Neutro + desacuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:3.31%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">3.3%</span></div>
+        <div class="sv-q">He fortalecido mi liderazgo externo como referente territorial</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:40%;background:#1B4F91"></div></div><span class="sv-val">~40%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:32.95%;background:#4b9ad4"></div></div><span class="sv-val">~33%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175" style="color:#8a8a82">Neutro + desacuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:27.05%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">27.0%</span></div>
+        <div class="sv-q">He fortalecido mi liderazgo disciplinar reconocido por pares</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:42%;background:#1B4F91"></div></div><span class="sv-val">~42%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:34.23%;background:#4b9ad4"></div></div><span class="sv-val">~34%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175" style="color:#8a8a82">Neutro + desacuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:23.77%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">23.8%</span></div>
+      </div>
+      <div class="card">
+        <h3>Encuesta organizaciones externas 2025 &mdash; Valoraci&oacute;n USS (n=22)</h3>
+        <div class="sv-note">% muy de acuerdo + de acuerdo</div>
+        <div class="sv-q" style="margin-top:0;padding-top:0;border-top:none">USS logra vincularse con necesidades reales de comunidades</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:95.45%;background:#7a1e30"></div></div><span class="sv-val">95.5%</span></div>
+        <div class="sv-q">USS aporta a la resoluci&oacute;n de problemas comunitarios</div>
+        <div class="sv-row"><span class="sv-lbl w175">S&iacute;</span><div class="sv-bg"><div class="sv-fill" style="width:100%;background:#7a1e30"></div></div><span class="sv-val">100%</span></div>
+        <div class="sv-q">Contratar&iacute;an profesionales egresados de la USS</div>
+        <div class="sv-row"><span class="sv-lbl w175">S&iacute;</span><div class="sv-bg"><div class="sv-fill" style="width:90.91%;background:#7a1e30"></div></div><span class="sv-val">90.9%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175" style="color:#8a8a82">No sabe</span><div class="sv-bg"><div class="sv-fill" style="width:9.09%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">9.1%</span></div>
+        <div class="sv-q">Inter&eacute;s en seguir desarrollando proyectos con USS</div>
+        <div class="sv-row"><span class="sv-lbl w175">S&iacute;</span><div class="sv-bg"><div class="sv-fill" style="width:90.91%;background:#7a1e30"></div></div><span class="sv-val">90.9%</span></div>
+        <div class="sv-q">Recomendar&iacute;a trabajar con USS a otra organizaci&oacute;n</div>
+        <div class="sv-row"><span class="sv-lbl w175">S&iacute;</span><div class="sv-bg"><div class="sv-fill" style="width:100%;background:#7a1e30"></div></div><span class="sv-val">100%</span></div>
+        <div class="sv-q">El proyecto permiti&oacute; acceder a redes estrat&eacute;gicas</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:86.36%;background:#7a1e30"></div></div><span class="sv-val">86.4%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:13.64%;background:#b35570"></div></div><span class="sv-val">13.6%</span></div>
+        <div class="info-box" style="margin-top:12px">100% recomendar&iacute;a la USS &middot; 90.9% quiere continuar &middot; 100% proceso colaborativo &middot; 100% comunicaci&oacute;n eficaz</div>
+      </div>
+    </div>
+    <div class="card-full">
+      <h3>Valores USS m&aacute;s promovidos en Proyectos VcM &mdash; seg&uacute;n acad&eacute;micos (n=117)</h3>
+      <div class="sv-note">% de acad&eacute;micos que mencionaron cada valor como uno de los m&aacute;s promovidos</div>
+      <canvas id="c_rep1" class="chart-canvas" data-h="220"></canvas>
+    </div>
+  </div>
+</div>
+<!-- S2 -->
+<div class="str-section s2" id="s2">
+  <div class="str-header"><div class="str-num-badge">2</div><div class="str-title-block"><h2>Estrategia 2 &mdash; Integraci&oacute;n formativa</h2><p>Integraci&oacute;n curricular &middot; Participaci&oacute;n estudiantil &middot; Resultados formativos</p></div></div>
+
+  <div class="dim-section" id="d2_3">
+    <div class="dim-label">Dimensi&oacute;n 3 &middot; Integraci&oacute;n curricular efectiva &mdash; Asignaturas con VcM 2025</div>
+    <div class="g4" style="margin-bottom:13px">
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Asignaturas con atributo VcM</div><div class="kpi-val" style="color:#155a3d">11</div><div class="kpi-note">Todas por redise&ntilde;o curricular</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Estudiantes 2025 (11 asignat.)</div><div class="kpi-val" style="color:#155a3d">1.900</div><div class="kpi-note up">&#9650;&nbsp;143 reprobados &middot; aprobaci&oacute;n global</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Terapia Ocup. &mdash; 4 asignaturas</div><div class="kpi-val" style="color:#155a3d">1.041</div><div class="kpi-note">Aprob. 2025 (50 reprob.)</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Fonoaudiolog&iacute;a &mdash; 5 asignat.</div><div class="kpi-val" style="color:#155a3d">655</div><div class="kpi-note">Aprob. 2025 (69 reprob.)</div></div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <h3>Estudiantes en asignaturas VcM &mdash; 2024 vs 2025</h3>
+        <div class="sv-note">Aprobados y reprobados por carrera</div>
+        <div class="lgd">
+          <span><span class="ldot" style="background:#8faed9"></span>Aprobados 2024</span>
+          <span><span class="ldot" style="background:#155a3d"></span>Aprobados 2025</span>
+          <span><span class="ldot" style="background:#fac775"></span>Reprobados 2024</span>
+          <span><span class="ldot" style="background:#e86c2c"></span>Reprobados 2025</span>
+        </div>
+        <canvas id="c_ic1" class="chart-canvas" data-h="200"></canvas>
+      </div>
+      <div class="card">
+        <h3>Asignaturas VcM por nivel curricular &mdash; 2025</h3>
+        <div class="sv-note">N&uacute;mero de asignaturas activas con atributo VcM por nivel</div>
+        <div class="lgd"><span><span class="ldot" style="background:#155a3d"></span>Asignaturas activas</span></div>
+        <canvas id="c_ic2" class="chart-canvas" data-h="200"></canvas>
+      </div>
+    </div>
+    <div class="card-full">
+      <h3>Detalle de asignaturas con atributo VcM con estudiantes activos en 2025</h3>
+      <div class="sv-note">Todas las asignaturas son de tipo Redise&ntilde;o.</div>
+      <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:10px">
+        <thead><tr style="background:var(--bg2);border-bottom:2px solid var(--bdr)">
+          <th style="text-align:left;padding:8px 10px;font-weight:700;color:var(--tx2)">Carrera</th>
+          <th style="text-align:left;padding:8px 10px;font-weight:700;color:var(--tx2)">Asignatura</th>
+          <th style="text-align:center;padding:8px 10px;font-weight:700;color:var(--tx2)">Niv.</th>
+          <th style="text-align:center;padding:8px 10px;font-weight:700;color:var(--tx2)">Tipo</th>
+          <th style="text-align:center;padding:8px 10px;font-weight:700;color:var(--tx2)">Aprob. 2025</th>
+          <th style="text-align:center;padding:8px 10px;font-weight:700;color:var(--tx2)">Reprob. 2025</th>
+          <th style="text-align:center;padding:8px 10px;font-weight:700;color:var(--tx2)">Aprob. 2024</th>
+          <th style="text-align:center;padding:8px 10px;font-weight:700;color:var(--tx2)">Reprob. 2024</th>
+        </tr></thead>
+        <tbody>
+          <tr style="border-bottom:.5px solid var(--bdr)"><td style="padding:8px 10px;font-weight:600;color:#185FA5">Fonoaudiolog&iacute;a</td><td style="padding:8px 10px">Bases de la Comunicaci&oacute;n Humana (FONAA005)</td><td style="text-align:center;padding:8px 10px">1</td><td style="text-align:center;padding:8px 10px"><span class="tag g" style="font-size:10px;padding:2px 7px">Redise&ntilde;o</span></td><td style="text-align:center;padding:8px 10px;font-weight:600">91</td><td style="text-align:center;padding:8px 10px;color:#854F0B">9</td><td style="text-align:center;padding:8px 10px">188</td><td style="text-align:center;padding:8px 10px;color:#854F0B">11</td></tr>
+          <tr style="border-bottom:.5px solid var(--bdr);background:var(--bg2)"><td style="padding:8px 10px;font-weight:600;color:#185FA5">Fonoaudiolog&iacute;a</td><td style="padding:8px 10px">Fon&eacute;tica, Fonolog&iacute;a y Morfosintaxis (FONAB005)</td><td style="text-align:center;padding:8px 10px">2</td><td style="text-align:center;padding:8px 10px"><span class="tag g" style="font-size:10px;padding:2px 7px">Redise&ntilde;o</span></td><td style="text-align:center;padding:8px 10px;font-weight:600">112</td><td style="text-align:center;padding:8px 10px;color:#854F0B">34</td><td style="text-align:center;padding:8px 10px">218</td><td style="text-align:center;padding:8px 10px;color:#854F0B">31</td></tr>
+          <tr style="border-bottom:.5px solid var(--bdr)"><td style="padding:8px 10px;font-weight:600;color:#185FA5">Fonoaudiolog&iacute;a</td><td style="padding:8px 10px">Sem&aacute;ntica y Pragm&aacute;tica (FONAC004)</td><td style="text-align:center;padding:8px 10px">3</td><td style="text-align:center;padding:8px 10px"><span class="tag g" style="font-size:10px;padding:2px 7px">Redise&ntilde;o</span></td><td style="text-align:center;padding:8px 10px;font-weight:600">163</td><td style="text-align:center;padding:8px 10px;color:#854F0B">11</td><td style="text-align:center;padding:8px 10px">0</td><td style="text-align:center;padding:8px 10px">0</td></tr>
+          <tr style="border-bottom:.5px solid var(--bdr);background:var(--bg2)"><td style="padding:8px 10px;font-weight:600;color:#185FA5">Fonoaudiolog&iacute;a</td><td style="padding:8px 10px">Psicoling&uuml;&iacute;stica (FONAD009)</td><td style="text-align:center;padding:8px 10px">4</td><td style="text-align:center;padding:8px 10px"><span class="tag g" style="font-size:10px;padding:2px 7px">Redise&ntilde;o</span></td><td style="text-align:center;padding:8px 10px;font-weight:600">135</td><td style="text-align:center;padding:8px 10px;color:#854F0B">13</td><td style="text-align:center;padding:8px 10px">0</td><td style="text-align:center;padding:8px 10px">0</td></tr>
+          <tr style="border-bottom:.5px solid var(--bdr)"><td style="padding:8px 10px;font-weight:600;color:#185FA5">Fonoaudiolog&iacute;a</td><td style="padding:8px 10px">Bases del diagn&oacute;stico e intervenci&oacute;n comunitaria (FONAD011)</td><td style="text-align:center;padding:8px 10px">4</td><td style="text-align:center;padding:8px 10px"><span class="tag g" style="font-size:10px;padding:2px 7px">Redise&ntilde;o</span></td><td style="text-align:center;padding:8px 10px;font-weight:600">154</td><td style="text-align:center;padding:8px 10px;color:#854F0B">2</td><td style="text-align:center;padding:8px 10px">0</td><td style="text-align:center;padding:8px 10px">0</td></tr>
+          <tr style="border-bottom:.5px solid var(--bdr);background:var(--bg2)"><td style="padding:8px 10px;font-weight:600;color:#854F0B">Nutrici&oacute;n y Diet&eacute;tica</td><td style="padding:8px 10px">Eval. Estado Nutricional Adulto y Persona Mayor (NYGAB004)</td><td style="text-align:center;padding:8px 10px">2</td><td style="text-align:center;padding:8px 10px"><span class="tag g" style="font-size:10px;padding:2px 7px">Redise&ntilde;o</span></td><td style="text-align:center;padding:8px 10px;font-weight:600">176</td><td style="text-align:center;padding:8px 10px;color:#854F0B">1</td><td style="text-align:center;padding:8px 10px">216</td><td style="text-align:center;padding:8px 10px;color:#854F0B">12</td></tr>
+          <tr style="border-bottom:.5px solid var(--bdr)"><td style="padding:8px 10px;font-weight:600;color:#854F0B">Nutrici&oacute;n y Diet&eacute;tica</td><td style="padding:8px 10px">Eval. Estado Nutricional Materno Infantil (NYGAC011)</td><td style="text-align:center;padding:8px 10px">3</td><td style="text-align:center;padding:8px 10px"><span class="tag g" style="font-size:10px;padding:2px 7px">Redise&ntilde;o</span></td><td style="text-align:center;padding:8px 10px;font-weight:600">28</td><td style="text-align:center;padding:8px 10px;color:#854F0B">23</td><td style="text-align:center;padding:8px 10px">0</td><td style="text-align:center;padding:8px 10px">0</td></tr>
+          <tr style="border-bottom:.5px solid var(--bdr);background:var(--bg2)"><td style="padding:8px 10px;font-weight:600;color:#155a3d">Terapia Ocupacional</td><td style="padding:8px 10px">Destrezas y Actividades Terap&eacute;uticas I (TEOCA005)</td><td style="text-align:center;padding:8px 10px">1</td><td style="text-align:center;padding:8px 10px"><span class="tag g" style="font-size:10px;padding:2px 7px">Redise&ntilde;o</span></td><td style="text-align:center;padding:8px 10px;font-weight:600">247</td><td style="text-align:center;padding:8px 10px;color:#854F0B">22</td><td style="text-align:center;padding:8px 10px">326</td><td style="text-align:center;padding:8px 10px;color:#854F0B">20</td></tr>
+          <tr style="border-bottom:.5px solid var(--bdr)"><td style="padding:8px 10px;font-weight:600;color:#155a3d">Terapia Ocupacional</td><td style="padding:8px 10px">Destrezas y Actividades Terap&eacute;uticas II (TEOCB006)</td><td style="text-align:center;padding:8px 10px">2</td><td style="text-align:center;padding:8px 10px"><span class="tag g" style="font-size:10px;padding:2px 7px">Redise&ntilde;o</span></td><td style="text-align:center;padding:8px 10px;font-weight:600">240</td><td style="text-align:center;padding:8px 10px;color:#854F0B">9</td><td style="text-align:center;padding:8px 10px">300</td><td style="text-align:center;padding:8px 10px;color:#854F0B">9</td></tr>
+          <tr style="border-bottom:.5px solid var(--bdr);background:var(--bg2)"><td style="padding:8px 10px;font-weight:600;color:#155a3d">Terapia Ocupacional</td><td style="padding:8px 10px">Ocupaci&oacute;n y Competencias Profesionales I (TEOCC009)</td><td style="text-align:center;padding:8px 10px">3</td><td style="text-align:center;padding:8px 10px"><span class="tag g" style="font-size:10px;padding:2px 7px">Redise&ntilde;o</span></td><td style="text-align:center;padding:8px 10px;font-weight:600">287</td><td style="text-align:center;padding:8px 10px;color:#854F0B">11</td><td style="text-align:center;padding:8px 10px">0</td><td style="text-align:center;padding:8px 10px">0</td></tr>
+          <tr style="border-bottom:.5px solid var(--bdr)"><td style="padding:8px 10px;font-weight:600;color:#155a3d">Terapia Ocupacional</td><td style="padding:8px 10px">Ocupaci&oacute;n y Competencias Profesionales II (TEOCD007)</td><td style="text-align:center;padding:8px 10px">4</td><td style="text-align:center;padding:8px 10px"><span class="tag g" style="font-size:10px;padding:2px 7px">Redise&ntilde;o</span></td><td style="text-align:center;padding:8px 10px;font-weight:600">267</td><td style="text-align:center;padding:8px 10px;color:#854F0B">8</td><td style="text-align:center;padding:8px 10px">0</td><td style="text-align:center;padding:8px 10px">0</td></tr>
+          <tr style="border-top:2px solid var(--bdr);background:#f0f4f0"><td colspan="4" style="padding:8px 10px;font-weight:700">Total asignaturas activas 2025</td><td style="text-align:center;padding:8px 10px;font-weight:700">1.900</td><td style="text-align:center;padding:8px 10px;font-weight:700;color:#854F0B">143</td><td style="text-align:center;padding:8px 10px;font-weight:700">1.248</td><td style="text-align:center;padding:8px 10px;font-weight:700;color:#854F0B">83</td></tr>
+        </tbody>
+      </table>
+      <div class="sig-grid" style="margin-top:13px">
+        <div class="sig ok"><div class="sig-t">&#9650; Terapia Ocupacional lidera en volumen</div><div class="sig-b">4 asignaturas con 1.041 aprobados en 2025. TEOCC009 alcanza 287 estudiantes, el mayor registro individual de la facultad. Consolida la integraci&oacute;n curricular en niveles 1 a 4.</div></div>
+        <div class="sig wn"><div class="sig-t">&#9888; Kinesiolog&iacute;a sin asignaturas VcM</div><div class="sig-b">La carrera con mayor crecimiento (1.001 estudiantes en 2025) a&uacute;n no tiene asignaturas formalizadas con atributo VcM. Oportunidad de cierre de brecha curricular en 2026.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dim-section" id="d2_4">
+    <div class="dim-label">Dimensi&oacute;n 4 &middot; Participaci&oacute;n estudiantil &mdash; Cobertura efectiva 2022&ndash;2025</div>
+    <div class="g4" style="margin-bottom:13px">
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Estudiantes participantes 2025</div><div class="kpi-val" style="color:#155a3d">2.660</div><div class="kpi-note">Kine: 1.001 &middot; Nutri: 706 &middot; TO: 607</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Cobertura pregrado 2025</div><div class="kpi-val" style="color:#155a3d">59%</div><div class="kpi-note up">&#9650;&nbsp;+3 pp vs 2024 (56%)</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Nutrici&oacute;n y Diet&eacute;tica &mdash; cob. 2025</div><div class="kpi-val" style="color:#155a3d">65%</div><div class="kpi-note up">&#9650;&nbsp;vs 63% en 2024</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Kinesiolog&iacute;a &mdash; cobertura 2025</div><div class="kpi-val" style="color:#155a3d">61%</div><div class="kpi-note dn">&#9660;&nbsp;vs 62% en 2024</div></div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <h3>Estudiantes participantes 2022&ndash;2025 (total facultad)</h3>
+        <canvas id="c_total_est" class="chart-canvas" data-h="200"></canvas>
+      </div>
+      <div class="card">
+        <h3>Cobertura % pregrado diurno &mdash; Facultad CRCV</h3>
+        <canvas id="c_cob_total" class="chart-canvas" data-h="200"></canvas>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <h3>Estudiantes por carrera 2022&ndash;2025 (n absoluto)</h3>
+        <div class="lgd"><span><span class="ldot" style="background:#cdd9ee"></span>2022</span><span><span class="ldot" style="background:#8faed9"></span>2023</span><span><span class="ldot" style="background:#4b9ad4"></span>2024</span><span><span class="ldot" style="background:#1B4F91"></span>2025</span></div>
+        <canvas id="c10" class="chart-canvas" data-h="200"></canvas>
+      </div>
+      <div class="card">
+        <h3>Cobertura % por carrera 2022&ndash;2025</h3>
+        <div class="lgd"><span><span class="ldot" style="background:#3a7dba"></span>Nutrici&oacute;n</span><span><span class="ldot" style="background:#e07a2a"></span>Kinesiolog&iacute;a</span><span><span class="ldot" style="background:#155a3d"></span>Terapia Ocup.</span><span><span class="ldot" style="background:#7a1e30"></span>Fonoaudiolog&iacute;a</span></div>
+        <canvas id="c9" class="chart-canvas" data-h="200"></canvas>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <h3>Estudiantes participantes por sede 2022&ndash;2025</h3>
+        <div class="lgd"><span><span class="ldot" style="background:#cdd9ee"></span>2022</span><span><span class="ldot" style="background:#8faed9"></span>2023</span><span><span class="ldot" style="background:#4b9ad4"></span>2024</span><span><span class="ldot" style="background:#1B4F91"></span>2025</span></div>
+        <canvas id="c11" class="chart-canvas" data-h="200"></canvas>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;justify-content:center">
+        <h3>Sede con mayor n&uacute;mero de estudiantes 2025</h3>
+        <div class="sv-note" style="margin-bottom:12px">N absoluto de estudiantes participantes por sede</div>
+        <div class="sv-row"><span class="sv-lbl w155">Santiago</span><div class="sv-bg"><div class="sv-fill" style="width:100%;background:#1B4F91"></div></div><span class="sv-val">1.041</span></div>
+        <div class="sv-row"><span class="sv-lbl w155">Concepci&oacute;n</span><div class="sv-bg"><div class="sv-fill" style="width:79.7%;background:#2470c8"></div></div><span class="sv-val">830</span></div>
+        <div class="sv-row"><span class="sv-lbl w155">Valdivia</span><div class="sv-bg"><div class="sv-fill" style="width:43.1%;background:#4b9ad4"></div></div><span class="sv-val">449</span></div>
+        <div class="sv-row"><span class="sv-lbl w155">Patagonia</span><div class="sv-bg"><div class="sv-fill" style="width:32.6%;background:#7eb6e8"></div></div><span class="sv-val">339</span></div>
+        <div class="info-box">Santiago lider&oacute; en 2025 con 1.041 estudiantes. Valdivia registr&oacute; el mayor crecimiento del periodo: +70% respecto a 2024 (262 &rarr; 449).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dim-section" id="d2_5">
+    <div class="dim-label">Dimensi&oacute;n 5 &middot; Resultados formativos &mdash; Encuesta percepci&oacute;n estudiantes 2025</div>
+    <div class="g4" style="margin-bottom:13px">
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Impacto positivo / muy positivo</div><div class="kpi-val" style="color:#155a3d">94.1%</div><div class="kpi-note up">&#9650;&nbsp;n=858 estudiantes encuestados</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Aplicar lo aprendido en clases</div><div class="kpi-val" style="color:#155a3d">94.4%</div><div class="kpi-note up">&#9650;&nbsp;Muy importante + Importante</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Recomendar&iacute;a participar</div><div class="kpi-val" style="color:#155a3d">99.0%</div><div class="kpi-note up">&#9650;&nbsp;n=792 estudiantes</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Sab&iacute;a que era iniciativa VcM</div><div class="kpi-val" style="color:#155a3d">85.7%</div><div class="kpi-note">n=805 estudiantes</div></div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <h3>Impacto formativo del proyecto colaborativo (n=858)</h3>
+        <div class="sv-note">El impacto del Proyecto Colaborativo para mi formaci&oacute;n profesional fue:</div>
+        <div class="sv-row" style="margin-top:8px"><span class="sv-lbl w155">Muy positivo</span><div class="sv-bg"><div class="sv-fill" style="width:65.27%;background:#155a3d"></div></div><span class="sv-val">65.3%</span></div>
+        <div class="sv-row"><span class="sv-lbl w155">Positivo</span><div class="sv-bg"><div class="sv-fill" style="width:28.79%;background:#4da070"></div></div><span class="sv-val">28.8%</span></div>
+        <div class="sv-row"><span class="sv-lbl w155" style="color:#8a8a82">Neutro (no impact&oacute;)</span><div class="sv-bg"><div class="sv-fill" style="width:5.71%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">5.7%</span></div>
+        <div class="sv-row"><span class="sv-lbl w155" style="color:#A32D2D">Negativo</span><div class="sv-bg"><div class="sv-fill" style="width:0.23%;background:#f4a0a0"></div></div><span class="sv-val" style="color:#A32D2D">0.2%</span></div>
+        <div class="sv-q">Conocer la realidad, conectando con problemas comunitarios (n=812)</div>
+        <div class="sv-row"><span class="sv-lbl w155">Muy importante</span><div class="sv-bg"><div class="sv-fill" style="width:82.63%;background:#155a3d"></div></div><span class="sv-val">82.6%</span></div>
+        <div class="sv-row"><span class="sv-lbl w155">Importante</span><div class="sv-bg"><div class="sv-fill" style="width:14.39%;background:#4da070"></div></div><span class="sv-val">14.4%</span></div>
+        <div class="sv-row"><span class="sv-lbl w155" style="color:#8a8a82">Med. importante o menos</span><div class="sv-bg"><div class="sv-fill" style="width:2.98%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">3.0%</span></div>
+      </div>
+      <div class="card">
+        <h3>Fortalecimiento de habilidades en el proyecto colaborativo (n=812)</h3>
+        <div class="sv-note">% Muy importante + Importante por dimensi&oacute;n de aprendizaje</div>
+        <canvas id="c12" class="chart-canvas" data-h="170"></canvas>
+        <div class="sv-q" style="margin-top:14px">Fortalecer los valores sebastianos en mi persona (n=812)</div>
+        <div class="sv-row"><span class="sv-lbl w155">Muy importante</span><div class="sv-bg"><div class="sv-fill" style="width:71.7%;background:#155a3d"></div></div><span class="sv-val">71.7%</span></div>
+        <div class="sv-row"><span class="sv-lbl w155">Importante</span><div class="sv-bg"><div class="sv-fill" style="width:16.21%;background:#4da070"></div></div><span class="sv-val">16.2%</span></div>
+        <div class="sv-row"><span class="sv-lbl w155" style="color:#8a8a82">Med. importante o menos</span><div class="sv-bg"><div class="sv-fill" style="width:12.09%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">12.1%</span></div>
+      </div>
+    </div>
+    <div class="card-full">
+      <h3>Conocimiento VcM y Recomendaci&oacute;n &mdash; Encuesta estudiantes CRCV 2025</h3>
+      <div class="sv-note">Preguntas de cierre del cuestionario de percepci&oacute;n estudiantil</div>
+      <div class="g3" style="margin-top:12px;margin-bottom:0">
+        <div style="background:#0f2d52;border-radius:var(--rl);padding:16px 18px;text-align:center;color:#fff">
+          <div style="font-size:36px;font-weight:900;line-height:1">85.7%</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:6px;line-height:1.4">sab&iacute;a que su proyecto era<br>una iniciativa de VcM (n=805)</div>
+        </div>
+        <div style="background:#0f2d52;border-radius:var(--rl);padding:16px 18px;text-align:center;color:#fff">
+          <div style="font-size:36px;font-weight:900;line-height:1">99.0%</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:6px;line-height:1.4">recomendar&iacute;a a compa&ntilde;eros/as<br>participar en Proyectos Colaborativos (n=792)</div>
+        </div>
+        <div style="background:#0f2d52;border-radius:var(--rl);padding:16px 18px;text-align:center;color:#fff">
+          <div style="font-size:36px;font-weight:900;line-height:1">94.1%</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:6px;line-height:1.4">eval&uacute;a el impacto como<br>positivo o muy positivo (n=858)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- S3 -->
+<div class="str-section s3" id="s3">
+  <div class="str-header"><div class="str-num-badge">3</div><div class="str-title-block"><h2>Estrategia 3 &mdash; Desarrollo acad&eacute;mico</h2><p>Pr&aacute;ctica docente &middot; Desarrollo profesional</p></div></div>
+
+  <div class="dim-section" id="d3_6">
+    <div class="dim-label">Dimensi&oacute;n 6 &middot; Pr&aacute;ctica docente &mdash; Encuesta acad&eacute;micos 2025 (n=124)</div>
+    <div class="g2">
+      <div class="card">
+        <h3>Aportes a la pr&aacute;ctica docente (n=124)</h3>
+        <div class="sv-note">% de acuerdo + muy de acuerdo</div>
+        <div class="sv-q" style="margin-top:0;padding-top:0;border-top:none">Estimulan responsabilidad social y compromiso con el cambio social</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:65%;background:#6d3a00"></div></div><span class="sv-val">~65%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:30.97%;background:#a05a1e"></div></div><span class="sv-val">~31%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175" style="color:#8a8a82">Neutro + desacuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:4.03%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">4.0%</span></div>
+        <div class="sv-q">Fortalecen la pr&aacute;ctica docente</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:60%;background:#6d3a00"></div></div><span class="sv-val">~60%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:34.35%;background:#a05a1e"></div></div><span class="sv-val">~34%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175" style="color:#8a8a82">Neutro + desacuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:5.65%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">5.6%</span></div>
+        <div class="sv-q">Retroalimentan y mejoran la pertinencia de procesos formativos</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:60%;background:#6d3a00"></div></div><span class="sv-val">~60%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:34.31%;background:#a05a1e"></div></div><span class="sv-val">~34%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175" style="color:#8a8a82">Neutro + desacuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:5.69%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">5.7%</span></div>
+        <div class="sv-q">Mejoran comunicaci&oacute;n e interacci&oacute;n con estudiantes</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:62%;background:#6d3a00"></div></div><span class="sv-val">~62%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:33.12%;background:#a05a1e"></div></div><span class="sv-val">~33%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175" style="color:#8a8a82">Neutro + desacuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:4.88%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">4.9%</span></div>
+        <div class="sv-q">Incrementan motivaci&oacute;n de los estudiantes</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:60%;background:#6d3a00"></div></div><span class="sv-val">~60%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:33.55%;background:#a05a1e"></div></div><span class="sv-val">~34%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175" style="color:#8a8a82">Neutro + desacuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:6.45%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">6.5%</span></div>
+        <div class="sv-q">Contribuyen a conformaci&oacute;n de cultura de innovaci&oacute;n en USS</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:50%;background:#6d3a00"></div></div><span class="sv-val">~50%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:34.68%;background:#a05a1e"></div></div><span class="sv-val">~35%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175" style="color:#8a8a82">Neutro + desacuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:15.32%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">15.3%</span></div>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;gap:0">
+        <h3>Resumen visual: aporte a la pr&aacute;ctica docente</h3>
+        <div class="sv-note">% de acuerdo + muy de acuerdo por afirmaci&oacute;n (n=124)</div>
+        <canvas id="c_doc1" class="chart-canvas" data-h="240" style="margin-top:8px"></canvas>
+        <div class="sig-grid" style="margin-top:14px">
+          <div class="sig ok"><div class="sig-t">&#9650; Responsabilidad social lidera</div><div class="sig-b">96.0% de acad&eacute;micos acuerda que los proyectos VcM estimulan la responsabilidad social, el indicador m&aacute;s alto del grupo. Coherente con el perfil territorial de la facultad.</div></div>
+          <div class="sig wn"><div class="sig-t">&#9888; Innovaci&oacute;n institucional con menor tracci&oacute;n</div><div class="sig-b">84.7% en el &iacute;tem de cultura de innovaci&oacute;n, 11 pp por debajo del indicador m&aacute;s alto. Brecha significativa que merece refuerzo en narrativa y reconocimiento institucional.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dim-section" id="d3_7">
+    <div class="dim-label">Dimensi&oacute;n 7 &middot; Desarrollo profesional del acad&eacute;mico &mdash; Encuesta acad&eacute;micos 2025 (n=122)</div>
+    <div class="g2">
+      <div class="card">
+        <h3>Aportes al desarrollo profesional y acad&eacute;mico (n=122)</h3>
+        <div class="sv-note">% de acuerdo + muy de acuerdo</div>
+        <div class="sv-q" style="margin-top:0;padding-top:0;border-top:none">He promovido y aplicado los valores USS</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:70%;background:#6d3a00"></div></div><span class="sv-val">~70%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:26.69%;background:#a05a1e"></div></div><span class="sv-val">~27%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175" style="color:#8a8a82">Neutro + desacuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:3.31%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">3.3%</span></div>
+        <div class="sv-q">He potenciado mi contribuci&oacute;n profesional a la sociedad</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:60%;background:#6d3a00"></div></div><span class="sv-val">~60%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:32.62%;background:#a05a1e"></div></div><span class="sv-val">~33%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175" style="color:#8a8a82">Neutro + desacuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:7.38%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">7.4%</span></div>
+        <div class="sv-q">He adquirido conocimientos sobre problemas sociales y territoriales</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:55%;background:#6d3a00"></div></div><span class="sv-val">~55%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:33.43%;background:#a05a1e"></div></div><span class="sv-val">~33%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175" style="color:#8a8a82">Neutro + desacuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:11.57%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">11.6%</span></div>
+        <div class="sv-q">Me he desarrollado profesionalmente</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:55%;background:#6d3a00"></div></div><span class="sv-val">~55%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:32.6%;background:#a05a1e"></div></div><span class="sv-val">~33%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175" style="color:#8a8a82">Neutro + desacuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:12.4%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">12.4%</span></div>
+        <div class="sv-q">He fortalecido capacidad para relacionarme con actores del entorno</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:55%;background:#6d3a00"></div></div><span class="sv-val">~55%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:30%;background:#a05a1e"></div></div><span class="sv-val">~30%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175" style="color:#8a8a82">Neutro + desacuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:15%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">15.0%</span></div>
+        <div class="sv-q">He ampliado mi red de contactos profesionales</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:42%;background:#6d3a00"></div></div><span class="sv-val">~42%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:33.2%;background:#a05a1e"></div></div><span class="sv-val">~33%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175" style="color:#8a8a82">Neutro + desacuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:24.8%;background:#e0ddd8"></div></div><span class="sv-val" style="color:#8a8a82">24.8%</span></div>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;gap:0">
+        <h3>Resumen visual: aporte al desarrollo profesional</h3>
+        <div class="sv-note">% de acuerdo + muy de acuerdo por afirmaci&oacute;n (n=122)</div>
+        <canvas id="c_dev1" class="chart-canvas" data-h="240" style="margin-top:8px"></canvas>
+        <div class="sig-grid" style="margin-top:14px">
+          <div class="sig ok"><div class="sig-t">&#9650; Valores USS y contribuci&oacute;n social destacados</div><div class="sig-b">96.7% promueve y aplica valores USS, indicador m&aacute;s alto de la facultad. 92.6% ha potenciado su contribuci&oacute;n profesional a la sociedad, reflejando alto compromiso territorial.</div></div>
+          <div class="sig wn"><div class="sig-t">&#9888; Red de contactos profesionales m&aacute;s d&eacute;bil</div><div class="sig-b">75.2% ampli&oacute; su red de contactos, el indicador m&aacute;s bajo del grupo, 21 pp por debajo de la promoci&oacute;n de valores USS. El v&iacute;nculo territorial no siempre se traduce en redes duraderas.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- S4 -->
+<div class="str-section s4" id="s4">
+  <div class="str-header"><div class="str-num-badge">4</div><div class="str-title-block"><h2>Estrategia 4 &mdash; Contribuci&oacute;n territorial</h2><p>Pertinencia territorial &middot; Valoraci&oacute;n territorial</p></div></div>
+
+  <div class="dim-section" id="d4_8">
+    <div class="dim-label">Dimensi&oacute;n 8 &middot; Pertinencia territorial &mdash; Portafolio de proyectos 2022&ndash;2025</div>
+    <div class="card-full">
+      <div style="display:flex;align-items:flex-start;gap:24px">
+        <div style="flex-shrink:0;text-align:center;padding:20px 16px;background:#0f2d52;border-radius:var(--rl);min-width:110px">
+          <div style="font-size:56px;font-weight:900;color:#fff;line-height:1">178</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:6px;font-weight:500">Proyectos<br>Clasificados</div>
+          <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.15);font-size:10px;color:rgba(255,255,255,.5)">2022&ndash;2025</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:7px">
+          <div style="background:#0f2d52;border-radius:var(--rm);padding:11px 16px;color:#fff">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+              <span style="font-size:12px;font-weight:600">Alimentaci&oacute;n Saludable, Nutrici&oacute;n y Seguridad Alimentaria</span>
+              <div style="display:flex;align-items:baseline;gap:4px;flex-shrink:0;margin-left:16px"><span style="font-size:22px;font-weight:800;color:#7eb6e8">57</span><span style="font-size:10px;color:rgba(255,255,255,.5)">proy.<br>32.0%</span></div>
+            </div>
+            <div style="background:rgba(255,255,255,.12);border-radius:3px;height:5px"><div style="width:32%;height:100%;background:#7eb6e8;border-radius:3px"></div></div>
+          </div>
+          <div style="background:#0f2d52;border-radius:var(--rm);padding:11px 16px;color:#fff">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+              <span style="font-size:12px;font-weight:600">Salud Ocupacional, Comunidades Vulnerables y Reinserci&oacute;n Social</span>
+              <div style="display:flex;align-items:baseline;gap:4px;flex-shrink:0;margin-left:16px"><span style="font-size:22px;font-weight:800;color:#7eb6e8">45</span><span style="font-size:10px;color:rgba(255,255,255,.5)">proy.<br>25.3%</span></div>
+            </div>
+            <div style="background:rgba(255,255,255,.12);border-radius:3px;height:5px"><div style="width:25.3%;height:100%;background:#7eb6e8;border-radius:3px"></div></div>
+          </div>
+          <div style="background:#0f2d52;border-radius:var(--rm);padding:11px 16px;color:#fff">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+              <span style="font-size:12px;font-weight:600">Salud y Rehabilitaci&oacute;n de Personas Mayores</span>
+              <div style="display:flex;align-items:baseline;gap:4px;flex-shrink:0;margin-left:16px"><span style="font-size:22px;font-weight:800;color:#7eb6e8">36</span><span style="font-size:10px;color:rgba(255,255,255,.5)">proy.<br>20.2%</span></div>
+            </div>
+            <div style="background:rgba(255,255,255,.12);border-radius:3px;height:5px"><div style="width:20.2%;height:100%;background:#7eb6e8;border-radius:3px"></div></div>
+          </div>
+          <div style="background:#0f2d52;border-radius:var(--rm);padding:11px 16px;color:#fff">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+              <span style="font-size:12px;font-weight:600">Desarrollo Infantil, Familia y Educaci&oacute;n</span>
+              <div style="display:flex;align-items:baseline;gap:4px;flex-shrink:0;margin-left:16px"><span style="font-size:22px;font-weight:800;color:#7eb6e8">23</span><span style="font-size:10px;color:rgba(255,255,255,.5)">proy.<br>12.9%</span></div>
+            </div>
+            <div style="background:rgba(255,255,255,.12);border-radius:3px;height:5px"><div style="width:12.9%;height:100%;background:#7eb6e8;border-radius:3px"></div></div>
+          </div>
+          <div style="background:#0f2d52;border-radius:var(--rm);padding:11px 16px;color:#fff">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+              <span style="font-size:12px;font-weight:600">Inclusi&oacute;n, Discapacidad y Neurodesarrollo</span>
+              <div style="display:flex;align-items:baseline;gap:4px;flex-shrink:0;margin-left:16px"><span style="font-size:22px;font-weight:800;color:#7eb6e8">17</span><span style="font-size:10px;color:rgba(255,255,255,.5)">proy.<br>9.6%</span></div>
+            </div>
+            <div style="background:rgba(255,255,255,.12);border-radius:3px;height:5px"><div style="width:9.6%;height:100%;background:#7eb6e8;border-radius:3px"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px">
+      <div style="background:#1B4F91;border-radius:var(--rl);overflow:hidden">
+        <div style="padding:12px 14px 8px;display:flex;align-items:flex-start;justify-content:space-between">
+          <div style="font-size:12px;font-weight:700;color:#fff;line-height:1.3;flex:1">Alimentaci&oacute;n Saludable y Nutrici&oacute;n</div>
+          <div style="background:rgba(255,255,255,.18);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:8px"><span style="font-size:15px;font-weight:800;color:#fff">57</span></div>
+        </div>
+        <div style="padding:0 14px 4px;font-size:10px;color:rgba(255,255,255,.55)">32.0% de proyectos clasificados</div>
+        <div style="padding:6px 14px 12px;display:flex;flex-direction:column;gap:6px">
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>Educaci&oacute;n alimentaria y nutricional escolar</span><b>22</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:38.6%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>Nutrici&oacute;n cl&iacute;nica y evaluaci&oacute;n nutricional</span><b>15</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:26.3%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>Seguridad alimentaria y soberan&iacute;a</span><b>10</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:17.5%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>H&aacute;bitos saludables y prevenci&oacute;n obesidad</span><b>7</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:12.3%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>Lactancia materna y nutrici&oacute;n materno-infantil</span><b>3</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:5.3%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+        </div>
+      </div>
+      <div style="background:#3b2270;border-radius:var(--rl);overflow:hidden">
+        <div style="padding:12px 14px 8px;display:flex;align-items:flex-start;justify-content:space-between">
+          <div style="font-size:12px;font-weight:700;color:#fff;line-height:1.3;flex:1">Salud Ocupacional y Comunidades</div>
+          <div style="background:rgba(255,255,255,.18);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:8px"><span style="font-size:15px;font-weight:800;color:#fff">45</span></div>
+        </div>
+        <div style="padding:0 14px 4px;font-size:10px;color:rgba(255,255,255,.55)">25.3% de proyectos clasificados</div>
+        <div style="padding:6px 14px 12px;display:flex;flex-direction:column;gap:6px">
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>Salud ocupacional y ergonom&iacute;a</span><b>20</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:44.4%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>Rehabilitaci&oacute;n en contexto laboral</span><b>12</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:26.7%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>Comunidades vulnerables y reinserci&oacute;n social</span><b>8</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:17.8%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>Salud mental comunitaria</span><b>5</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:11.1%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+        </div>
+      </div>
+      <div style="background:#155a3d;border-radius:var(--rl);overflow:hidden">
+        <div style="padding:12px 14px 8px;display:flex;align-items:flex-start;justify-content:space-between">
+          <div style="font-size:12px;font-weight:700;color:#fff;line-height:1.3;flex:1">Personas Mayores y Rehabilitaci&oacute;n</div>
+          <div style="background:rgba(255,255,255,.18);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:8px"><span style="font-size:15px;font-weight:800;color:#fff">36</span></div>
+        </div>
+        <div style="padding:0 14px 4px;font-size:10px;color:rgba(255,255,255,.55)">20.2% de proyectos clasificados</div>
+        <div style="padding:6px 14px 12px;display:flex;flex-direction:column;gap:6px">
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>Rehabilitaci&oacute;n f&iacute;sica y motora</span><b>14</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:38.9%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>Envejecimiento activo y calidad de vida</span><b>12</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:33.3%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>Estimulaci&oacute;n cognitiva y salud mental</span><b>6</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:16.7%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>Cuidadores informales y ELEAM</span><b>4</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:11.1%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+        </div>
+      </div>
+      <div style="background:#6d3a00;border-radius:var(--rl);overflow:hidden">
+        <div style="padding:12px 14px 8px;display:flex;align-items:flex-start;justify-content:space-between">
+          <div style="font-size:12px;font-weight:700;color:#fff;line-height:1.3;flex:1">Desarrollo Infantil, Familia y Educaci&oacute;n</div>
+          <div style="background:rgba(255,255,255,.18);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:8px"><span style="font-size:15px;font-weight:800;color:#fff">23</span></div>
+        </div>
+        <div style="padding:0 14px 4px;font-size:10px;color:rgba(255,255,255,.55)">12.9% &mdash; &aacute;rea con fuerte presencia temprana</div>
+        <div style="padding:6px 14px 12px;display:flex;flex-direction:column;gap:6px">
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>Estimulaci&oacute;n temprana y desarrollo psicomotor</span><b>10</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:43.5%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>Lenguaje, comunicaci&oacute;n y aprendizaje</span><b>6</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:26.1%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>Habilidades parentales y crianza</span><b>4</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:17.4%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>Inclusi&oacute;n escolar y NEE</span><b>3</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:13.0%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+        </div>
+      </div>
+      <div style="background:#7a1e30;border-radius:var(--rl);overflow:hidden">
+        <div style="padding:12px 14px 8px;display:flex;align-items:flex-start;justify-content:space-between">
+          <div style="font-size:12px;font-weight:700;color:#fff;line-height:1.3;flex:1">Inclusi&oacute;n, Discapacidad y Neurodesarrollo</div>
+          <div style="background:rgba(255,255,255,.18);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:8px"><span style="font-size:15px;font-weight:800;color:#fff">17</span></div>
+        </div>
+        <div style="padding:0 14px 4px;font-size:10px;color:rgba(255,255,255,.55)">9.6% &mdash; &aacute;rea con mayor potencial frente a la demanda social</div>
+        <div style="padding:6px 14px 12px;display:flex;flex-direction:column;gap:6px">
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>Trastorno del Espectro Autista (TEA)</span><b>8</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:47.1%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>Discapacidad motora y accesibilidad</span><b>4</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:23.5%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>Neurodiversidad e inclusi&oacute;n educativa</span><b>3</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:17.6%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);margin-bottom:3px"><span>Salud mental y rehabilitaci&oacute;n psicosocial</span><b>2</b></div><div style="background:rgba(255,255,255,.15);border-radius:2px;height:4px"><div style="width:11.8%;height:100%;background:rgba(255,255,255,.7);border-radius:2px"></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-full">
+      <h3>Despliegue territorial &mdash; Top 20 comunas con mayor presencia (proyectos acumulados 2022&ndash;2025)</h3>
+      <div class="sv-note">120 comunas alcanzadas &middot; Top 20 concentra el 64% del total de proyectos</div>
+      <canvas id="c_com20" class="chart-canvas" data-h="420"></canvas>
+    </div>
+  </div>
+
+  <div class="dim-section" id="d4_9">
+    <div class="dim-label">Dimensi&oacute;n 9 &middot; Valoraci&oacute;n territorial &mdash; Encuesta organizaciones externas 2025 (n=22)</div>
+    <div class="g4" style="margin-bottom:13px">
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Proceso colaborativo mutuo</div><div class="kpi-val" style="color:#7a1e30">100%</div><div class="kpi-note up">&#9650;&nbsp;100% de acuerdo</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Compromisos cumplidos</div><div class="kpi-val" style="color:#7a1e30">100%</div><div class="kpi-note up">&#9650;&nbsp;100% de acuerdo</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Impacto positivo en comunidad</div><div class="kpi-val" style="color:#7a1e30">95.5%</div><div class="kpi-note up">&#9650;&nbsp;de acuerdo/muy de acuerdo</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Calidad del servicio entregado</div><div class="kpi-val" style="color:#7a1e30">95.5%</div><div class="kpi-note up">&#9650;&nbsp;de acuerdo/muy de acuerdo</div></div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <h3>Percepci&oacute;n sobre ejecuci&oacute;n del proyecto (n=22)</h3>
+        <div class="sv-note">% muy de acuerdo + de acuerdo</div>
+        <div class="sv-q" style="margin-top:0;padding-top:0;border-top:none">Proceso realmente colaborativo, de cooperaci&oacute;n mutua</div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:100%;background:#7a1e30"></div></div><span class="sv-val">100%</span></div>
+        <div class="sv-q">Se logr&oacute; comunicaci&oacute;n eficaz con la Universidad</div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:100%;background:#7a1e30"></div></div><span class="sv-val">100%</span></div>
+        <div class="sv-q">Se cumplieron compromisos establecidos</div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:100%;background:#7a1e30"></div></div><span class="sv-val">100%</span></div>
+        <div class="sv-q">Se logr&oacute; entregar un servicio o producto de calidad</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:95.45%;background:#7a1e30"></div></div><span class="sv-val">95.5%</span></div>
+        <div class="sv-q">El proyecto tuvo impacto positivo en la comunidad</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:95.45%;background:#7a1e30"></div></div><span class="sv-val">95.5%</span></div>
+        <div class="sv-q">El proyecto permiti&oacute; acceder a redes estrat&eacute;gicas</div>
+        <div class="sv-row"><span class="sv-lbl w175">Muy de acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:86.36%;background:#7a1e30"></div></div><span class="sv-val">86.4%</span></div>
+        <div class="sv-row"><span class="sv-lbl w175">De acuerdo</span><div class="sv-bg"><div class="sv-fill" style="width:13.64%;background:#b35570"></div></div><span class="sv-val">13.6%</span></div>
+      </div>
+      <div class="card">
+        <h3>&iquest;Alg&uacute;n egresado USS se incorpor&oacute; a la organizaci&oacute;n? (n=22)</h3>
+        <div class="sv-note">Luego de la ejecuci&oacute;n del Proyecto Colaborativo</div>
+        <div style="margin-top:12px">
+          <div class="sv-row"><span class="sv-lbl w155">S&iacute;</span><div class="sv-bg"><div class="sv-fill" style="width:4.54%;background:#7a1e30"></div></div><span class="sv-val">4.5%</span></div>
+          <div class="sv-row"><span class="sv-lbl w155">No</span><div class="sv-bg"><div class="sv-fill" style="width:31.82%;background:#c0c0b8"></div></div><span class="sv-val">31.8%</span></div>
+          <div class="sv-row"><span class="sv-lbl w155">No sabe</span><div class="sv-bg"><div class="sv-fill" style="width:63.64%;background:#e0ddd8"></div></div><span class="sv-val">63.6%</span></div>
+        </div>
+        <div class="alert-box" style="margin-top:12px">Baja tasa de inserci&oacute;n directa (4.5%) + alto "no sabe" (63.6%): no existe mecanismo de seguimiento post-proyecto. Oportunidad concreta de mejora en la ruta estudiante&rarr;colaborador.</div>
+        <div class="sig-grid" style="margin-top:12px">
+          <div class="sig ok"><div class="sig-t">&#9650; Proceso colaborativo excepcional</div><div class="sig-b">100% valora la colaboraci&oacute;n como genuinamente mutua. Comunicaci&oacute;n y compromisos tambi&eacute;n al 100%. Ning&uacute;n caso de desacuerdo en toda la encuesta.</div></div>
+          <div class="sig ok"><div class="sig-t">&#9650; Calidad y continuidad s&oacute;lidas</div><div class="sig-b">95.5% report&oacute; calidad del servicio. 100% recomendar&iacute;a USS y 90.9% quiere continuar proyectos: alta fidelizaci&oacute;n de socios territoriales.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S5 -->
+<div class="str-section s5" id="s5">
+  <div class="str-header"><div class="str-num-badge">5</div><div class="str-title-block"><h2>Estrategia 5 &mdash; Gesti&oacute;n institucional</h2><p>Capacidades &middot; Gesti&oacute;n y desempe&ntilde;o &middot; Recursos e inversi&oacute;n</p></div></div>
+
+  <div class="dim-section" id="d5_10">
+    <div class="dim-label">Dimensi&oacute;n 10 &middot; Capacidades institucionales</div>
+    <div style="padding:14px 0;color:var(--tx3);font-size:12.5px">Sin datos disponibles para este periodo. Esta dimensi&oacute;n ser&aacute; incorporada en el ciclo 2026.</div>
+  </div>
+
+  <div class="dim-section" id="d5_11">
+    <div class="dim-label">Dimensi&oacute;n 11 &middot; Gesti&oacute;n y desempe&ntilde;o &mdash; Cumplimiento convenios acad&eacute;micos VcM 2025</div>
+    <div class="g4" style="margin-bottom:13px">
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Cumplimiento convenios</div><div class="kpi-val" style="color:#3b2270">87.8%</div><div class="kpi-note up">&#9650;&nbsp;Promedio ponderado (n=8)</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Acad&eacute;micos con convenio</div><div class="kpi-val" style="color:#3b2270">8</div><div class="kpi-note">Facultad CRCV</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">100% cumplimiento</div><div class="kpi-val" style="color:#3b2270">5</div><div class="kpi-note up">&#9650;&nbsp;5 de 8 acad&eacute;micos</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">A&ntilde;o de cumplimiento</div><div class="kpi-val" style="color:#3b2270">2025</div><div class="kpi-note">Todos en conformidad</div></div>
+    </div>
+    <div class="card-full">
+      <h3>Acad&eacute;micos con convenio de desempe&ntilde;o VcM 2025 &mdash; Porcentaje de cumplimiento</h3>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px">
+        <div style="background:var(--bg2);border-radius:var(--rl);padding:14px 16px;border-left:4px solid #3b2270">
+          <div style="font-size:13px;font-weight:700;color:var(--tx)">Ana Paula Cancino Ulloa</div>
+          <div style="font-size:11px;color:var(--tx3);margin-top:3px">Ciencias de la Rehabilitaci&oacute;n y Calidad de Vida</div>
+          <div style="margin-top:8px;display:inline-block;background:var(--ok-bg);color:var(--ok-tx);border:.5px solid var(--ok-bd);font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--rm)">100% Cumplimiento 2025</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:var(--rl);padding:14px 16px;border-left:4px solid #3b2270">
+          <div style="font-size:13px;font-weight:700;color:var(--tx)">Bautista Espinoza Espinoza</div>
+          <div style="font-size:11px;color:var(--tx3);margin-top:3px">Ciencias de la Rehabilitaci&oacute;n y Calidad de Vida</div>
+          <div style="margin-top:8px;display:inline-block;background:var(--ok-bg);color:var(--ok-tx);border:.5px solid var(--ok-bd);font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--rm)">100% Cumplimiento 2025</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:var(--rl);padding:14px 16px;border-left:4px solid #3b2270">
+          <div style="font-size:13px;font-weight:700;color:var(--tx)">Gerardo Hume Calder&oacute;n</div>
+          <div style="font-size:11px;color:var(--tx3);margin-top:3px">Ciencias de la Rehabilitaci&oacute;n y Calidad de Vida</div>
+          <div style="margin-top:8px;display:inline-block;background:var(--ok-bg);color:var(--ok-tx);border:.5px solid var(--ok-bd);font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--rm)">100% Cumplimiento 2025</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:var(--rl);padding:14px 16px;border-left:4px solid #3b2270">
+          <div style="font-size:13px;font-weight:700;color:var(--tx)">Daniela Mardones Guti&eacute;rrez</div>
+          <div style="font-size:11px;color:var(--tx3);margin-top:3px">Ciencias de la Rehabilitaci&oacute;n y Calidad de Vida</div>
+          <div style="margin-top:8px;display:inline-block;background:var(--ok-bg);color:var(--ok-tx);border:.5px solid var(--ok-bd);font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--rm)">100% Cumplimiento 2025</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:var(--rl);padding:14px 16px;border-left:4px solid #3b2270">
+          <div style="font-size:13px;font-weight:700;color:var(--tx)">Solange Mart&iacute;nez Gallegos</div>
+          <div style="font-size:11px;color:var(--tx3);margin-top:3px">Ciencias de la Rehabilitaci&oacute;n y Calidad de Vida</div>
+          <div style="margin-top:8px;display:inline-block;background:var(--ok-bg);color:var(--ok-tx);border:.5px solid var(--ok-bd);font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--rm)">100% Cumplimiento 2025</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:var(--rl);padding:14px 16px;border-left:4px solid #3b2270">
+          <div style="font-size:13px;font-weight:700;color:var(--tx)">Laura Morante Carriel</div>
+          <div style="font-size:11px;color:var(--tx3);margin-top:3px">Ciencias de la Rehabilitaci&oacute;n y Calidad de Vida</div>
+          <div style="margin-top:8px;display:inline-block;background:var(--ok-bg);color:var(--ok-tx);border:.5px solid var(--ok-bd);font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--rm)">100% Cumplimiento 2025</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:var(--rl);padding:14px 16px;border-left:4px solid #a05a1e">
+          <div style="font-size:13px;font-weight:700;color:var(--tx)">Cinthia Quezada Ram&iacute;rez</div>
+          <div style="font-size:11px;color:var(--tx3);margin-top:3px">Ciencias de la Rehabilitaci&oacute;n y Calidad de Vida</div>
+          <div style="margin-top:8px;display:inline-block;background:var(--wn-bg);color:var(--wn-tx);border:.5px solid var(--wn-bd);font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--rm)">93% Cumplimiento 2025</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:var(--rl);padding:14px 16px;border-left:4px solid #a05a1e">
+          <div style="font-size:13px;font-weight:700;color:var(--tx)">Gabriela Vargas Mardones</div>
+          <div style="font-size:11px;color:var(--tx3);margin-top:3px">Ciencias de la Rehabilitaci&oacute;n y Calidad de Vida</div>
+          <div style="margin-top:8px;display:inline-block;background:var(--wn-bg);color:var(--wn-tx);border:.5px solid var(--wn-bd);font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--rm)">89% Cumplimiento 2025</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dim-section" id="d5_12">
+    <div class="dim-label">Dimensi&oacute;n 12 &middot; Recursos e inversi&oacute;n &mdash; Fondos externos adjudicados 2025</div>
+    <div class="g4" style="margin-bottom:13px">
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Proyectos con fondo externo</div><div class="kpi-val" style="color:#3b2270">3</div><div class="kpi-note">2025</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Monto total adjudicado</div><div class="kpi-val" style="font-size:20px;color:#3b2270">$42,5M</div><div class="kpi-note">CLP adjudicado 2025</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Mayor proyecto 2025</div><div class="kpi-val" style="font-size:20px;color:#3b2270">$25M</div><div class="kpi-note">Comunidades Saludables Lota</div></div>
+      <div class="kpi" style="min-height:110px"><div class="kpi-lbl">Sedes con fondos</div><div class="kpi-val" style="color:#3b2270">2</div><div class="kpi-note">Valdivia &middot; Concepci&oacute;n</div></div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <h3>Monto adjudicado por proyecto 2025 (millones CLP)</h3>
+        <div class="lgd"><span><span class="ldot" style="background:#3b2270"></span>Monto adjudicado</span></div>
+        <canvas id="c_fe1" class="chart-canvas" data-h="210"></canvas>
+      </div>
+      <div class="card">
+        <h3>Distribuci&oacute;n acumulada por proyecto (millones CLP)</h3>
+        <canvas id="c_fe2" class="chart-canvas" data-h="210"></canvas>
+      </div>
+    </div>
+    <div class="card-full">
+      <h3>Detalle de proyectos con financiamiento externo 2025</h3>
+      <table style="width:100%;border-collapse:collapse;font-size:11.5px;margin-top:10px">
+        <thead><tr style="background:var(--bg2);border-bottom:2px solid var(--bdr)">
+          <th style="text-align:center;padding:8px 10px;font-weight:700;color:var(--tx2)">A&ntilde;o</th>
+          <th style="text-align:center;padding:8px 10px;font-weight:700;color:var(--tx2)">ID</th>
+          <th style="text-align:left;padding:8px 10px;font-weight:700;color:var(--tx2)">Nombre del proyecto</th>
+          <th style="text-align:center;padding:8px 10px;font-weight:700;color:var(--tx2)">Sede</th>
+          <th style="text-align:right;padding:8px 10px;font-weight:700;color:var(--tx2)">Monto</th>
+          <th style="text-align:center;padding:8px 10px;font-weight:700;color:var(--tx2)">Estado</th>
+        </tr></thead>
+        <tbody>
+          <tr style="border-bottom:.5px solid var(--bdr)"><td style="text-align:center;padding:7px 10px;font-weight:700">2025</td><td style="text-align:center;padding:7px 10px">4518</td><td style="padding:7px 10px">O&iacute;r para aprender</td><td style="text-align:center;padding:7px 10px">Valdivia</td><td style="text-align:right;padding:7px 10px;font-weight:600">$9.440.634</td><td style="text-align:center;padding:7px 10px"><span class="tag g" style="font-size:10px;padding:2px 6px">Adjudicado</span></td></tr>
+          <tr style="border-bottom:.5px solid var(--bdr);background:var(--bg2)"><td style="text-align:center;padding:7px 10px;font-weight:700">2025</td><td style="text-align:center;padding:7px 10px">4525</td><td style="padding:7px 10px">USS y BLUMAR comprometidos con la salud integral de la comunidad</td><td style="text-align:center;padding:7px 10px">Concepci&oacute;n</td><td style="text-align:right;padding:7px 10px;font-weight:600">$8.050.000</td><td style="text-align:center;padding:7px 10px"><span class="tag g" style="font-size:10px;padding:2px 6px">Adjudicado</span></td></tr>
+          <tr style="border-bottom:.5px solid var(--bdr)"><td style="text-align:center;padding:7px 10px;font-weight:700">2025</td><td style="text-align:center;padding:7px 10px">4825</td><td style="padding:7px 10px">Comunidades Saludables Coronel Lota: Educaci&oacute;n Alimentaria y Actividad</td><td style="text-align:center;padding:7px 10px">Concepci&oacute;n</td><td style="text-align:right;padding:7px 10px;font-weight:600">$25.000.000</td><td style="text-align:center;padding:7px 10px"><span class="tag g" style="font-size:10px;padding:2px 6px">Adjudicado</span></td></tr>
+          <tr style="border-top:2px solid var(--bdr);background:#ede8f4"><td colspan="4" style="padding:8px 10px;font-weight:700;color:#3b2270">Total adjudicado 2025</td><td style="text-align:right;padding:8px 10px;font-weight:700;color:#3b2270;font-size:13px">$42.490.634</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- SÍNTESIS -->
+<div class="str-section" id="sintesis" style="scroll-margin-top:72px">
+  <div class="str-header" style="border-color:#4a4a4a">
+    <div class="str-num-badge" style="background:#4a4a4a">&#9654;</div>
+    <div class="str-title-block"><h2 style="color:#4a4a4a">S&iacute;ntesis y reflexi&oacute;n estrat&eacute;gica</h2><p>Resumen de hallazgos 2022&ndash;2025 y preguntas para la direcci&oacute;n</p></div>
+  </div>
+  <div class="dim-label">Hechos destacados del periodo</div>
+  <div class="sig-grid" style="margin-bottom:16px">
+    <div class="sig ok"><div class="sig-t">&#9650; Crecimiento sostenido en cobertura estudiantil</div><div class="sig-b">De 49% (2022) a 59% (2025), con alza de +3 pp en el &uacute;ltimo a&ntilde;o. Con 2.660 estudiantes participantes, la facultad registra el mejor nivel de cobertura del periodo.</div></div>
+    <div class="sig ok"><div class="sig-t">&#9650; Valoraci&oacute;n externa excepcional</div><div class="sig-b">100% de organizaciones externas recomendar&iacute;a USS, 100% proceso colaborativo, 100% comunicaci&oacute;n eficaz y 100% compromisos cumplidos. Sin ning&uacute;n caso de desacuerdo.</div></div>
+    <div class="sig ok"><div class="sig-t">&#9733; Satisfacci&oacute;n estudiantil muy alta</div><div class="sig-b">94.1% reporta impacto positivo o muy positivo. 99% recomendar&iacute;a participar. 85.7% ten&iacute;a conciencia de que su proyecto era VcM. Indicadores s&oacute;lidos en toda la facultad.</div></div>
+    <div class="sig ok"><div class="sig-t">&#9733; Pr&aacute;ctica docente robusta</div><div class="sig-b">Entre 84.7% y 96.7% de acad&eacute;micos acuerda con las contribuciones del VcM. Responsabilidad social (96.0%) y promoci&oacute;n de valores USS (96.7%) lideran sin brechas relevantes.</div></div>
+    <div class="sig ok"><div class="sig-t">&#9650; Pertinencia territorial amplia</div><div class="sig-b">178 proyectos &uacute;nicos en 5 &aacute;reas tem&aacute;ticas y 120 comunas alcanzadas. El 45.5% del portafolio atiende adultos mayores y salud ocupacional.</div></div>
+    <div class="sig ok"><div class="sig-t">&#9650; Kinesiolog&iacute;a: crecimiento destacado</div><div class="sig-b">Salta de 17 proyectos (2022) a 40 (2024) y alcanza 1.001 estudiantes en 2025, la mayor cifra individual de la facultad. Abre paso a integraci&oacute;n curricular formal en 2026.</div></div>
+    <div class="sig wn"><div class="sig-t">&#9888; Liderazgo territorial concentrado</div><div class="sig-b">Valdivia y Concepci&oacute;n acumulan el 26% del total. El 34% restante se distribuye en 101 comunas con baja frecuencia individual, dificultando el impacto profundo y sostenido.</div></div>
+    <div class="sig wn"><div class="sig-t">&#9888; Integraci&oacute;n curricular acotada</div><div class="sig-b">11 asignaturas VcM en solo 3 carreras. Kinesiolog&iacute;a, con el mayor volumen de estudiantes, a&uacute;n no tiene asignaturas formalizadas. Brecha entre despliegue territorial y curr&iacute;culo.</div></div>
+    <div class="sig wn"><div class="sig-t">&#9888; Fondos externos concentrados en 2025</div><div class="sig-b">Los $42,5M CLP adjudicados se concentran en un solo a&ntilde;o (3 proyectos). No existe historial de captaci&oacute;n multi-anual, lo que expone la estrategia a alta variabilidad.</div></div>
+  </div>
+  <div class="dim-label">Preguntas de reflexi&oacute;n para el equipo directivo</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+    <div style="background:var(--bg2);border-radius:var(--rl);padding:1rem 1.1rem;border-left:4px solid #1B4F91">
+      <div style="font-size:11px;font-weight:700;color:#1B4F91;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">E1 &middot; V&iacute;nculo territorial</div>
+      <ul style="font-size:12px;color:var(--tx2);line-height:1.7;padding-left:16px">
+        <li>&iquest;C&oacute;mo fortalecer la presencia en las 101 comunas de baja frecuencia sin dispersar los recursos de articulaci&oacute;n? &iquest;Existe una <strong>estrategia de profundizaci&oacute;n</strong> en comunas de alto potencial como Puerto Montt, Temuco o Los &Aacute;ngeles?</li>
+        <li>&iquest;C&oacute;mo articulamos la <strong>expansi&oacute;n metropolitana</strong> para que las 4 comunas santiaguinas con 9&ndash;20 proyectos cada una se consoliden en un portafolio RM coherente?</li>
+      </ul>
+    </div>
+    <div style="background:var(--bg2);border-radius:var(--rl);padding:1rem 1.1rem;border-left:4px solid #155a3d">
+      <div style="font-size:11px;font-weight:700;color:#155a3d;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">E2 &middot; Integraci&oacute;n formativa</div>
+      <ul style="font-size:12px;color:var(--tx2);line-height:1.7;padding-left:16px">
+        <li>Kinesiolog&iacute;a lidera en n&uacute;mero de estudiantes pero no tiene asignaturas VcM: &iquest;cu&aacute;l es la <strong>hoja de ruta para incorporarla</strong> al curr&iacute;culo con atributo VcM en el ciclo 2026?</li>
+        <li>&iquest;La distribuci&oacute;n de asignaturas VcM concentrada en Terapia Ocupacional y Fonoaudiolog&iacute;a responde a una <strong>l&oacute;gica progresiva</strong> deliberada o a la disponibilidad de asignaturas?</li>
+      </ul>
+    </div>
+    <div style="background:var(--bg2);border-radius:var(--rl);padding:1rem 1.1rem;border-left:4px solid #6d3a00">
+      <div style="font-size:11px;font-weight:700;color:#6d3a00;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">E3 &middot; Desarrollo acad&eacute;mico</div>
+      <ul style="font-size:12px;color:var(--tx2);line-height:1.7;padding-left:16px">
+        <li>El &iacute;tem de cultura de innovaci&oacute;n (84.7%) est&aacute; 11 pp por debajo del m&aacute;ximo del grupo: &iquest;c&oacute;mo <strong>reforzamos la narrativa de innovaci&oacute;n</strong> asociada al VcM para los acad&eacute;micos?</li>
+        <li>&iquest;C&oacute;mo institucionalizamos el <strong>reconocimiento expl&iacute;cito</strong> del desarrollo profesional v&iacute;a VcM en la trayectoria docente, m&aacute;s all&aacute; de la percepci&oacute;n individual?</li>
+      </ul>
+    </div>
+    <div style="background:var(--bg2);border-radius:var(--rl);padding:1rem 1.1rem;border-left:4px solid #7a1e30">
+      <div style="font-size:11px;font-weight:700;color:#7a1e30;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">E4 &middot; Contribuci&oacute;n territorial</div>
+      <ul style="font-size:12px;color:var(--tx2);line-height:1.7;padding-left:16px">
+        <li>&iquest;C&oacute;mo escalamos el &aacute;rea de Inclusi&oacute;n y TEA (9.6%) dada la <strong>alta demanda social</strong>? El potencial de expansi&oacute;n es el m&aacute;s claro de las 5 &aacute;reas del portafolio.</li>
+        <li>Solo 4.5% de organizaciones reporta haber incorporado a un egresado: &iquest;implementamos un <strong>mecanismo de seguimiento</strong> para convertir el v&iacute;nculo VcM en empleo?</li>
+      </ul>
+    </div>
+    <div style="background:var(--bg2);border-radius:var(--rl);padding:1rem 1.1rem;border-left:4px solid #3b2270;grid-column:1/-1">
+      <div style="font-size:11px;font-weight:700;color:#3b2270;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">E5 &middot; Gesti&oacute;n institucional</div>
+      <ul style="font-size:12px;color:var(--tx2);line-height:1.7;padding-left:16px;columns:2;gap:2rem">
+        <li>Los $42,5M CLP adjudicados se concentran en 2025 en solo 3 proyectos: &iquest;existe una <strong>estrategia multi-anual de captaci&oacute;n</strong> para reducir la volatilidad y sostener el nivel en 2026&ndash;2027?</li>
+        <li>&iquest;C&oacute;mo articulamos los 3 proyectos con financiamiento externo con los proyectos colaborativos en una <strong>narrativa de impacto institucional</strong> coherente hacia fuentes externas y acreditadoras?</li>
+      </ul>
+    </div>
+  </div>
+  <div class="ftr">Dashboard VcM &mdash; Facultad de Ciencias de la Rehabilitaci&oacute;n y Calidad de Vida &middot; Universidad San Sebasti&oacute;n &middot; 2022&ndash;2025</div>
+</div>
+
+</div><!-- .content -->
+</div><!-- #main -->
+
+<script>
+function getW(cv){return cv.parentElement.clientWidth||600}
+function toggleNav(btn,id){btn.classList.toggle('open');document.getElementById(id).classList.toggle('open')}
+function goTo(id,btn){
+  const el=document.getElementById(id);
+  if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.nav-dim-btn').forEach(b=>b.classList.remove('active'));
+  if(btn&&btn.classList.contains('nav-dim-btn'))btn.classList.add('active');
+}
+
+function drawBarChart(id,labels,datasets,opts){
+  const cv=document.getElementById(id);if(!cv)return;
+  const dpr=window.devicePixelRatio||1;
+  const W=getW(cv);const H=parseInt(cv.getAttribute('data-h'))||200;
+  cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';
+  const ctx=cv.getContext('2d');ctx.scale(dpr,dpr);
+  ctx.clearRect(0,0,W,H);
+  const o=opts||{};const maxV=o.maxVal||Math.max(...datasets.flatMap(d=>d.data.filter(v=>v!==null&&v!==undefined)))*1.1;
+  const nL=labels.length;const nD=datasets.length;
+  const padL=32,padR=10,padT=18,padB=40;
+  const chartW=W-padL-padR;const chartH=H-padT-padB;
+  const gW=chartW/nL;const bW=gW*0.72/nD;const gGap=gW*0.14;
+  [0,0.25,0.5,0.75,1].forEach(r=>{
+    const y=padT+chartH*(1-r);
+    ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(W-padR,y);ctx.strokeStyle='rgba(0,0,0,.06)';ctx.lineWidth=1;ctx.stroke();
+    ctx.fillStyle='#aaa';ctx.font='9.5px -apple-system,sans-serif';ctx.textAlign='right';
+    ctx.fillText(Math.round(r*maxV),padL-3,y+3);
+  });
+  datasets.forEach((ds,di)=>{
+    ds.data.forEach((v,li)=>{
+      if(v===null||v===undefined)return;
+      const x=padL+li*gW+gGap+di*(bW+1);
+      const bH=(v/maxV)*chartH;
+      const y=padT+chartH-bH;
+      ctx.fillStyle=ds.color;
+      ctx.fillRect(x,y,bW,bH);
+      if(bH>14){ctx.fillStyle='#fff';ctx.font='bold 8.5px -apple-system,sans-serif';ctx.textAlign='center';ctx.fillText(v,x+bW/2,y+9);}
+    });
+  });
+  labels.forEach((lbl,i)=>{
+    const x=padL+i*gW+gW/2;
+    ctx.fillStyle='#666';ctx.font='9.5px -apple-system,sans-serif';ctx.textAlign='center';
+    const parts=lbl.split('\n');
+    parts.forEach((p,pi)=>ctx.fillText(p,x,H-padB+14+pi*11));
+  });
+}
+
+function drawHBarChart(id,labels,data,colors,opts){
+  const cv=document.getElementById(id);if(!cv)return;
+  const dpr=window.devicePixelRatio||1;
+  const W=getW(cv);const H=parseInt(cv.getAttribute('data-h'))||200;
+  cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';
+  const ctx=cv.getContext('2d');ctx.scale(dpr,dpr);
+  ctx.clearRect(0,0,W,H);
+  const o=opts||{};
+  const lW=o.lW||180;const maxV=o.maxVal||Math.max(...data)*1.15;
+  const padR=50;const chartW=W-lW-padR;
+  const n=labels.length;const rowH=H/n;const bH=rowH*0.55;
+  labels.forEach((lbl,i)=>{
+    const y=i*rowH+rowH/2;
+    const bW=Math.max(2,(data[i]/maxV)*chartW);
+    ctx.fillStyle=colors[i]||'#888';
+    ctx.fillRect(lW,y-bH/2,bW,bH);
+    ctx.fillStyle='#4a4a42';ctx.font='10.5px -apple-system,sans-serif';ctx.textAlign='right';
+    ctx.fillText(lbl,lW-6,y+4);
+    const valStr=o.pct?(data[i]+'%'):String(data[i]);
+    ctx.fillStyle='#222';ctx.font='bold 10.5px -apple-system,sans-serif';ctx.textAlign='left';
+    ctx.fillText(valStr,lW+bW+5,y+4);
+  });
+}
+
+function drawDonut(id,labels,data,colors){
+  const cv=document.getElementById(id);if(!cv)return;
+  const dpr=window.devicePixelRatio||1;
+  const W=getW(cv);const H=parseInt(cv.getAttribute('data-h'))||210;
+  cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';
+  const ctx=cv.getContext('2d');ctx.scale(dpr,dpr);
+  ctx.clearRect(0,0,W,H);
+  const total=data.reduce((a,b)=>a+b,0);
+  const legH=labels.length*18+10;const chartH=H-legH;
+  const cx=W/2,cy=chartH/2,r=Math.min(cx,cy)-16,ri=r*0.55;
+  let angle=-Math.PI/2;
+  data.forEach((v,i)=>{
+    const slice=(v/total)*Math.PI*2;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,angle,angle+slice);ctx.closePath();
+    ctx.fillStyle=colors[i];ctx.fill();
+    ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+    const mid=angle+slice/2;
+    const lx=cx+Math.cos(mid)*(r+ri)/2,ly=cy+Math.sin(mid)*(r+ri)/2;
+    ctx.fillStyle='#fff';ctx.font='bold 11px -apple-system,sans-serif';ctx.textAlign='center';
+    if(v/total>0.08)ctx.fillText(Math.round(v/total*100)+'%',lx,ly+4);
+    angle+=slice;
+  });
+  ctx.beginPath();ctx.arc(cx,cy,ri,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
+  labels.forEach((lbl,i)=>{
+    const ly=chartH+10+i*18;
+    ctx.fillStyle=colors[i];ctx.fillRect(10,ly+2,12,12);
+    ctx.fillStyle='#5a5a55';ctx.font='11px -apple-system,sans-serif';ctx.textAlign='left';
+    ctx.fillText(lbl+' ('+Math.round(data[i]/total*100)+'%)',26,ly+12);
+  });
+}
+
+function drawLineChart(id,labels,series){
+  const cv=document.getElementById(id);if(!cv)return;
+  const dpr=window.devicePixelRatio||1;
+  const W=getW(cv);const H=parseInt(cv.getAttribute('data-h'))||200;
+  cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';
+  const ctx=cv.getContext('2d');ctx.scale(dpr,dpr);
+  ctx.clearRect(0,0,W,H);
+  const padL=38,padR=20,padT=18,padB=28;
+  const chartW=W-padL-padR;const chartH=H-padT-padB;
+  const allV=series.flatMap(s=>s.data);
+  const mn=Math.min(...allV)*0.88;const mx=Math.max(...allV)*1.05;
+  const n=labels.length;
+  [0,0.25,0.5,0.75,1].forEach(r=>{
+    const y=padT+chartH*(1-r);
+    ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(W-padR,y);ctx.strokeStyle='rgba(0,0,0,.06)';ctx.lineWidth=1;ctx.stroke();
+    ctx.fillStyle='#aaa';ctx.font='9.5px -apple-system,sans-serif';ctx.textAlign='right';
+    ctx.fillText(Math.round(mn+(mx-mn)*r)+'%',padL-4,y+3);
+  });
+  series.forEach(s=>{
+    const pts=s.data.map((v,i)=>({x:padL+(i/(n-1))*chartW,y:padT+chartH-(v-mn)/(mx-mn)*chartH}));
+    ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+    ctx.strokeStyle=s.color;ctx.lineWidth=2.5;ctx.stroke();
+    pts.forEach((p,i)=>{
+      ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);
+      ctx.fillStyle=s.color;ctx.fill();
+      ctx.fillStyle='#333';ctx.font='bold 9.5px -apple-system,sans-serif';ctx.textAlign='center';
+      ctx.fillText(s.data[i]+'%',p.x,p.y-8);
+    });
+  });
+  labels.forEach((lbl,i)=>{
+    const x=padL+(i/(n-1))*chartW;
+    ctx.fillStyle='#666';ctx.font='10px -apple-system,sans-serif';ctx.textAlign='center';
+    ctx.fillText(lbl,x,H-padB+14);
+  });
+}
+
+function drawAll(){
+  const Y4=['2022','2023','2024','2025'];
+
+  drawBarChart('c1',['Lidera','Con participaci\u00f3n'],[
+    {label:'2022',data:[40,67],color:'#cdd9ee'},
+    {label:'2023',data:[38,74],color:'#8faed9'},
+    {label:'2024',data:[52,123],color:'#4b9ad4'},
+    {label:'2025',data:[52,110],color:'#1B4F91'}
+  ],{maxVal:135});
+
+  drawBarChart('c2',['Concepci\u00f3n','Valdivia','Santiago','Patagonia'],[
+    {label:'2022',data:[42,30,24,11],color:'#cdd9ee'},
+    {label:'2023',data:[46,22,26,18],color:'#8faed9'},
+    {label:'2024',data:[65,46,38,26],color:'#4b9ad4'},
+    {label:'2025',data:[55,47,41,19],color:'#1B4F91'}
+  ],{maxVal:75});
+
+  drawBarChart('c3',['Nutrici\u00f3n\ny Diet\u00e9tica','Fonoaudiolog\u00eda','Kinesiolog\u00eda','Terapia\nOcupacional'],[
+    {label:'2022',data:[19,12,6,3],color:'#cdd9ee'},
+    {label:'2023',data:[19,6,6,4],color:'#8faed9'},
+    {label:'2024',data:[18,10,9,12],color:'#4b9ad4'},
+    {label:'2025',data:[22,15,7,8],color:'#1B4F91'}
+  ],{maxVal:28});
+
+  drawBarChart('c4',['Nutrici\u00f3n\ny Diet\u00e9tica','Kinesiolog\u00eda','Fonoaudiolog\u00eda','Terapia\nOcupacional'],[
+    {label:'2022',data:[30,11,12,14],color:'#cdd9ee'},
+    {label:'2023',data:[26,15,13,20],color:'#8faed9'},
+    {label:'2024',data:[43,28,25,27],color:'#4b9ad4'},
+    {label:'2025',data:[35,32,20,21],color:'#1B4F91'}
+  ],{maxVal:50});
+
+  // PTH IIFE
+  const pthData=[
+    {lbl:'M\u00e1s Nutrici\u00f3n, M\u00e1s Vida',           vals:[33,41,45,40]},
+    {lbl:'M\u00e1s Personas Mayores Activas',   vals:[22,12,26,20]},
+    {lbl:'M\u00e1s Ni\u00f1ez y Adolescencia Saludable',vals:[9,17,24,22]},
+    {lbl:'M\u00e1s Salud, M\u00e1s Cerca',       vals:[5,12,22,26]},
+    {lbl:'M\u00e1s Comunidad',                   vals:[7,4,16,16]},
+    {lbl:'M\u00e1s Ciudadanos Conectados',       vals:[3,5,5,10]},
+    {lbl:'M\u00e1s Sinergia Territorial',        vals:[1,0,0,7]},
+    {lbl:'M\u00e1s Glocal',                      vals:[1,1,1,2]},
+    {lbl:'M\u00e1s Azul',                        vals:[1,1,4,2]},
+    {lbl:'M\u00e1s Parques',                     vals:[1,1,0,0]},
+    {lbl:'M\u00e1s Turismo Sostenible',          vals:[0,0,0,1]},
+  ];
+  (function(){
+    const cv=document.getElementById('c_pth');if(!cv)return;
+    const dpr=window.devicePixelRatio||1;
+    const W=getW(cv),H=440;
+    cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';
+    const ctx=cv.getContext('2d');ctx.scale(dpr,dpr);
+    ctx.clearRect(0,0,W,H);
+    const colors=['#cdd9ee','#8faed9','#4b9ad4','#1B4F91'];
+    const lW=210,padR=36,padT=6,chartW=W-lW-padR;
+    const nPTH=pthData.length,nYr=4;
+    const rowH=H/nPTH,bH=rowH*0.18,bGap=2,grpH=nYr*(bH+bGap);
+    const maxVal=45;
+    pthData.forEach((pth,pi)=>{
+      const yBase=padT+pi*rowH+(rowH-grpH)/2;
+      ctx.fillStyle='#4a4a42';ctx.font='10px -apple-system,sans-serif';ctx.textAlign='right';
+      const lbl=pth.lbl.length>30?pth.lbl.substring(0,29)+'\u2026':pth.lbl;
+      ctx.fillText(lbl,lW-6,yBase+grpH/2+3);
+      if(pi>0){ctx.beginPath();ctx.moveTo(0,padT+pi*rowH);ctx.lineTo(W,padT+pi*rowH);ctx.strokeStyle='rgba(0,0,0,.04)';ctx.lineWidth=1;ctx.stroke();}
+      pth.vals.forEach((v,yi)=>{
+        const y=yBase+yi*(bH+bGap);
+        const bW=Math.max(v>0?2:0,(v/maxVal)*chartW);
+        ctx.fillStyle=colors[yi];
+        ctx.fillRect(lW,y,bW,bH);
+        if(v>0){ctx.fillStyle='#333';ctx.font='bold 9px -apple-system,sans-serif';ctx.textAlign='left';ctx.fillText(v,lW+bW+3,y+bH-1);}
+      });
+    });
+    const yrLbls=['2022','2023','2024','2025'];
+    yrLbls.forEach((yr,i)=>{
+      ctx.fillStyle=colors[i];ctx.fillRect(lW+i*52,H-12,10,8);
+      ctx.fillStyle='#555';ctx.font='9px -apple-system,sans-serif';ctx.textAlign='left';
+      ctx.fillText(yr,lW+i*52+13,H-5);
+    });
+  })();
+
+  drawHBarChart('c5',
+    ['Valdivia','Concepci\u00f3n','Puerto Montt','Talcahuano','Providencia',
+     'San Pedro de la Paz','Santiago','Las Condes','Hualp\u00e9n','Pe\u00f1alol\u00e9n',
+     'Chiguayante','Pudahuel','Estaci\u00f3n Central','Puerto Varas','Los \u00c1ngeles',
+     'Corral','Tom\u00e9','Penco','Coronel','La Reina'],
+    [82,70,37,23,20,18,16,15,13,13,10,9,9,8,8,6,6,6,5,5],
+    ['#7a1e30','#7a1e30','#7a1e30','#a02040','#a02040',
+     '#c04060','#c04060','#c04060','#d06080','#d06080',
+     '#d06080','#d06080','#e090a0','#e090a0','#e090a0',
+     '#e090a0','#e090a0','#e090a0','#f0b8c0','#f0b8c0'],
+    {maxVal:95,lW:175,pct:false}
+  );
+
+  drawHBarChart('c6',
+    ['Enfermer\u00eda','Psicolog\u00eda','Obstetricia','Medicina','Odontolog\u00eda',
+     'Tecnolog\u00eda M\u00e9dica','Trabajo Social Adv.','Qu\u00edmica y Farmacia','Psicolog\u00eda Advance','Ingenier\u00eda Comercial'],
+    [100,88,60,58,48,39,35,34,34,33],
+    ['#1B4F91','#1B4F91','#2470c8','#2470c8','#4b9ad4','#4b9ad4','#7eb6e8','#7eb6e8','#aacde8','#cdd9ee'],
+    {maxVal:115,lW:200,pct:false}
+  );
+
+  drawBarChart('c7',['Fonoaudiolog\u00eda','Kinesiolog\u00eda','Nutrici\u00f3n\ny Diet\u00e9tica','Terapia\nOcupacional'],[
+    {label:'2022',data:[25,15,10,28],color:'#cdd9ee'},
+    {label:'2023',data:[21,27,35,40],color:'#8faed9'},
+    {label:'2024',data:[34,28,45,27],color:'#4b9ad4'},
+    {label:'2025',data:[45,30,41,17],color:'#1B4F91'}
+  ],{maxVal:52});
+
+  drawBarChart('c8',['Concepci\u00f3n','Santiago','Patagonia','Valdivia'],[
+    {label:'2022',data:[35,19,8,16],color:'#cdd9ee'},
+    {label:'2023',data:[61,20,18,24],color:'#8faed9'},
+    {label:'2024',data:[42,28,40,24],color:'#4b9ad4'},
+    {label:'2025',data:[49,44,22,18],color:'#1B4F91'}
+  ],{maxVal:70});
+
+  drawHBarChart('c_rep1',
+    ['La solidaridad y alegr\u00eda de servir','La responsabilidad y la prudencia','La dignidad de la persona humana','La racionalidad y capacidad reflexi\u00f3n','Fortaleza y perseverancia'],
+    [75.21,63.25,42.74,38.46,30.77],
+    ['#1B4F91','#2470c8','#4b9ad4','#7eb6e8','#aacde8'],
+    {maxVal:85,lW:245,pct:true}
+  );
+
+  drawBarChart('c_ic1',['FONO\n(5 asignat.)','NUTR\n(2 asignat.)','TEOC\n(4 asignat.)'],[
+    {label:'Aprob. 2024',data:[406,216,626],color:'#8faed9'},
+    {label:'Aprob. 2025',data:[655,204,1041],color:'#155a3d'},
+    {label:'Reprob. 2024',data:[42,12,29],color:'#fac775'},
+    {label:'Reprob. 2025',data:[69,24,50],color:'#e86c2c'}
+  ],{maxVal:1200});
+
+  drawBarChart('c_ic2',['Nivel 1','Nivel 2','Nivel 3','Nivel 4'],[
+    {label:'Asignaturas',data:[2,3,2,4],color:'#155a3d'}
+  ],{maxVal:6});
+
+  drawBarChart('c_total_est',Y4,[
+    {label:'Total estudiantes',data:[1998,2063,2477,2660],color:'#155a3d'}
+  ],{maxVal:3000});
+
+  drawLineChart('c_cob_total',Y4,[{data:[49,46,56,59],color:'#155a3d'}]);
+
+  drawLineChart('c9',Y4,[
+    {data:[65,58,63,65],color:'#3a7dba'},
+    {data:[46,35,51,57],color:'#e07a2a'},
+    {data:[37,46,52,53],color:'#155a3d'},
+    {data:[42,48,62,61],color:'#7a1e30'}
+  ]);
+
+  drawBarChart('c10',['Nutrici\u00f3n\ny Diet\u00e9tica','Kinesiolog\u00eda','Terapia\nOcupacional','Fonoaudiolog\u00eda'],[
+    {label:'2022',data:[768,558,375,297],color:'#cdd9ee'},
+    {label:'2023',data:[713,496,516,338],color:'#8faed9'},
+    {label:'2024',data:[718,773,606,380],color:'#4b9ad4'},
+    {label:'2025',data:[706,1001,607,325],color:'#1B4F91'}
+  ],{maxVal:1150});
+
+  drawBarChart('c11',['Santiago','Concepci\u00f3n','Valdivia','Patagonia'],[
+    {label:'2022',data:[735,760,264,239],color:'#cdd9ee'},
+    {label:'2023',data:[746,802,239,276],color:'#8faed9'},
+    {label:'2024',data:[1039,917,262,259],color:'#4b9ad4'},
+    {label:'2025',data:[1041,830,449,339],color:'#1B4F91'}
+  ],{maxVal:1180});
+
+  drawHBarChart('c12',
+    ['Aplicar lo aprendido en clases','Conocer realidad comunitaria','Trabajo interdisciplinario'],
+    [94.43,97.02,85.43],
+    ['#155a3d','#2a7d55','#4da070'],
+    {maxVal:100,lW:220,pct:true}
+  );
+
+  drawHBarChart('c_doc1',
+    ['Estim. responsabilidad social','Mejoran com. estudiantes','Fortalecen pr\u00e1ctica docente','Retroalimentan pertinencia','Incrementan motivaci\u00f3n','Cultura innovaci\u00f3n USS'],
+    [96.0,95.1,94.4,94.3,93.6,84.7],
+    ['#6d3a00','#6d3a00','#a05a1e','#a05a1e','#c87c3e','#c87c3e'],
+    {maxVal:100,lW:230,pct:true}
+  );
+
+  drawHBarChart('c_dev1',
+    ['Promueve y aplica valores USS','Potencia contrib. a la sociedad','Conocim. problemas territoriales','Desarro. profesional','Capacidad relacional entorno','Red de contactos profesionales'],
+    [96.7,92.6,88.4,87.6,85.0,75.2],
+    ['#6d3a00','#6d3a00','#a05a1e','#a05a1e','#c87c3e','#c87c3e'],
+    {maxVal:100,lW:235,pct:true}
+  );
+
+  drawHBarChart('c_com20',
+    ['Valdivia','Concepci\u00f3n','Puerto Montt','Talcahuano','Providencia',
+     'San Pedro de la Paz','Santiago','Las Condes','Hualp\u00e9n','Pe\u00f1alol\u00e9n',
+     'Chiguayante','Pudahuel','Estaci\u00f3n Central','Puerto Varas','Los \u00c1ngeles',
+     'Corral','Tom\u00e9','Penco','Coronel','La Reina'],
+    [82,70,37,23,20,18,16,15,13,13,10,9,9,8,8,6,6,6,5,5],
+    ['#7a1e30','#7a1e30','#7a1e30','#a02040','#a02040',
+     '#c04060','#c04060','#c04060','#d06080','#d06080',
+     '#d06080','#d06080','#e090a0','#e090a0','#e090a0',
+     '#e090a0','#e090a0','#e090a0','#f0b8c0','#f0b8c0'],
+    {maxVal:95,lW:175,pct:false}
+  );
+
+  drawBarChart('c_fe1',['O\u00edr para\naprender','USS-BLUMAR\nSalud integral','Com. Saludables\nCoronel Lota'],[
+    {label:'Adjudicado',data:[9.44,8.05,25.00],color:'#3b2270'}
+  ],{maxVal:28});
+
+  drawDonut('c_fe2',
+    ['O\u00edr para aprender: $9.4M','USS-BLUMAR: $8.1M','Com. Saludables: $25M'],
+    [9440634,8050000,25000000],
+    ['#3b2270','#6b52a0','#9b82d6']
+  );
+}
+
+window.addEventListener('load',()=>{drawAll();window.addEventListener('resize',drawAll);});
+</script>
+</body>
+</html>
